@@ -5,4 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!--Start string for welcomeScreen-->
+    <string name="welComeActivity_hello_facecook">Cùng facecook chia sẻ nhưng khoảng khắc tuyệt vời!</string>
 </resources>
