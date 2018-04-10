@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import vn.com.codedao.facecook.view.home.MainActivity;
 import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.view.login.Login;
 
 public class WelComeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -27,7 +27,7 @@ public class WelComeActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(TAG, "run() called" + e);
                 } finally {
-                    Intent intent = new Intent(WelComeActivity.this, MainActivity.class);
+                    Intent intent = new Intent(WelComeActivity.this, Login.class);
                     startActivity(intent);
                 }
             }

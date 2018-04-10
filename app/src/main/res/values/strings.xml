@@ -9,4 +9,8 @@
 
     <!--Start string for welcomeScreen-->
     <string name="welComeActivity_hello_facecook">Cùng facecook chia sẻ nhưng khoảng khắc tuyệt vời!</string>
+
+    <!--Start string for loginScreen-->
+    <string name="err_msg_name">username fomat fail</string>
+    <string name="err_msg_password">password fomat fail</string>
 </resources>
