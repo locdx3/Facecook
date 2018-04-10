@@ -1,8 +1,14 @@
 package vn.com.codedao.facecook.view.home;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +19,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import vn.com.codedao.facecook.R;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.model.home.mPost;
+import vn.com.codedao.facecook.presenter.home.PresenterLogicHandleHome;
+import vn.com.codedao.facecook.view.PostAdapter;
+
+public class Home extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, IHome {
+
+    private PresenterLogicHandleHome mPresenterLogicHandleHome;
+    private PostAdapter mPostAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +57,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Begin Code NamHV4
+        mRecyclerView = findViewById(R.id.rc_newFeed);
+        mPresenterLogicHandleHome = new PresenterLogicHandleHome(this);
+        mPresenterLogicHandleHome.getListPost();
+
+
     }
 
     @Override
@@ -100,4 +122,18 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void setApdater(List<mPost> posts) {
+        mPostAdapter = new PostAdapter(this,posts);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mPostAdapter);
+        mPostAdapter.notifyDataSetChanged();
+
+
+    }
+
 }
