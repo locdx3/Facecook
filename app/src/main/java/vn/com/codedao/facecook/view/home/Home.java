@@ -1,15 +1,13 @@
 package vn.com.codedao.facecook.view.home;
 
-import android.content.res.Resources;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,14 +20,19 @@ import android.view.MenuItem;
 import java.util.List;
 
 import vn.com.codedao.facecook.R;
-import vn.com.codedao.facecook.model.home.mPost;
-import vn.com.codedao.facecook.presenter.home.PresenterLogicHandleHome;
+import vn.com.codedao.facecook.model.newfeed.mPost;
+import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.view.PostAdapter;
+import vn.com.codedao.facecook.view.friend.FragmentFriend;
+import vn.com.codedao.facecook.view.menu.FragmentMenu;
+import vn.com.codedao.facecook.view.newfeed.FragmentNewFeed;
+import vn.com.codedao.facecook.view.newfeed.INewFeed;
+import vn.com.codedao.facecook.view.newfeed.SpacesItemDecoration;
 
 public class Home extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IHome {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private PresenterLogicHandleHome mPresenterLogicHandleHome;
+    private PresenterLogicHandleNewFeed mPresenterLogicHandleHome;
     private PostAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
 
@@ -40,14 +43,41 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contenfr, new FragmentNewFeed());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+        BottomNavigationView bottomNavigationView =
+                findViewById(R.id.naviBottom);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_favorites:
+                                transitFragment(new FragmentNewFeed());
+                                break;
+                            case R.id.action_schedules:
+                                transitFragment(new FragmentFriend());
+                                break;
+                            case R.id.action_music:
+                                transitFragment(new FragmentMenu());
+                                break;
+
+                        }
+                        return true;
+                    }
+                });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -59,11 +89,18 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Begin Code NamHV4
-        mRecyclerView = findViewById(R.id.rc_newFeed);
-        mPresenterLogicHandleHome = new PresenterLogicHandleHome(this);
-        mPresenterLogicHandleHome.getListPost();
+//        mRecyclerView = findViewById(R.id.rc_newFeed);
+//        mPresenterLogicHandleHome = new PresenterLogicHandleNewFeed(this);
+//        mPresenterLogicHandleHome.getListPost();
 
 
+    }
+
+    public void transitFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contenfr, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -123,17 +160,5 @@ public class Home extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void setApdater(List<mPost> posts) {
-        mPostAdapter = new PostAdapter(this,posts);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mPostAdapter);
-        mPostAdapter.notifyDataSetChanged();
-
-
-    }
 
 }

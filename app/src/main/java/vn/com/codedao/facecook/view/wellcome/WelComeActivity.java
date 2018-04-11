@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.view.home.Home;
 import vn.com.codedao.facecook.view.login.Login;
 
 public class WelComeActivity extends AppCompatActivity {
@@ -27,7 +28,7 @@ public class WelComeActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e(TAG, "run() called" + e);
                 } finally {
-                    Intent intent = new Intent(WelComeActivity.this, Login.class);
+                    Intent intent = new Intent(WelComeActivity.this, Home.class);
                     startActivity(intent);
                 }
             }

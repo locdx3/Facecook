@@ -1,6 +1,7 @@
 package vn.com.codedao.facecook.view.login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
+import vn.com.codedao.facecook.view.home.Home;
 
 public class Login extends AppCompatActivity implements iLoginView, View.OnClickListener {
     private EditText edusername, edpassword;
@@ -141,6 +143,8 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     public void loginSuccess() {
         pbmainlogin.setVisibility(View.GONE);
         Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, Home.class);
+        startActivity(intent);
     }
 
     @Override
