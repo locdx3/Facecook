@@ -7,34 +7,20 @@
     android:background="@drawable/background"
     tools:context="vn.com.codedao.facecook.view.wellcome.WelComeActivity">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#8C000000"
-        android:orientation="vertical"
-        android:paddingLeft="100dp"
-        android:paddingRight="100dp"
-        android:paddingTop="100dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_menu_camera" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
             android:text="@string/welComeActivity_hello_facecook"
             android:textAlignment="center"
-            android:textColor="#FFFFFF" />
-
-
-
+            android:textColor="#ff5100" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/logo_goodmorning" />
 </FrameLayout>

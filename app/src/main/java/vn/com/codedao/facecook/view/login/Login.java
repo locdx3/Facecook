@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -57,7 +60,7 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
 
             @Override
             public void afterTextChanged(Editable editable) {
-                validateName();
+                validateUsename();
             }
         });
 
@@ -89,18 +92,33 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
         input_layout_Password = findViewById(R.id.input_layout_Password);
     }
 
-    private boolean validateName() {
-        if (edusername.getText().toString().trim().isEmpty()) {
+    private boolean validateUsename() {
+        if (!validatePhone(edusername) && !validateEmail(edusername)) {
             input_layout_Username.setError(getString(R.string.err_msg_name));
             requestFocus(edusername);
             return false;
         } else {
             input_layout_Username.setErrorEnabled(false);
+            return true;
         }
+    }
 
+    private boolean validatePhone(EditText username) {
+        String phone = username.getText().toString().trim();
+        if (phone.length() < 10 || !PhoneNumberUtils.isGlobalPhoneNumber(phone)) {
+            return false;
+        }
         return true;
     }
 
+
+    private boolean validateEmail(EditText username) {
+        String email = username.getText().toString().trim();
+        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return false;
+        }
+        return true;
+    }
 
     private boolean validatePassword() {
         if (edpassword.getText().toString().trim().isEmpty()) {
@@ -142,9 +160,9 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     @Override
     public void loginSuccess() {
         pbmainlogin.setVisibility(View.GONE);
-        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, Home.class);
+        Intent intent = new Intent(Login.this, Home.class);
         startActivity(intent);
+        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -160,7 +178,7 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin:
-                if (!validateName()) {
+                if (!validateUsename()) {
                     Toast.makeText(Login.this, "UserName is Invalid",
                             Toast.LENGTH_LONG).show();
                 } else if (!validatePassword()) {
