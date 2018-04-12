@@ -17,7 +17,7 @@ import android.view.MenuItem;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
-import vn.com.codedao.facecook.view.PostAdapter;
+import vn.com.codedao.facecook.view.newfeed.PostAdapter;
 import vn.com.codedao.facecook.view.friend.FragmentFriend;
 import vn.com.codedao.facecook.view.menu.FragmentMenu;
 import vn.com.codedao.facecook.view.newfeed.FragmentNewFeed;

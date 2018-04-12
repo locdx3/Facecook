@@ -1,4 +1,4 @@
-package vn.com.codedao.facecook.view;
+package vn.com.codedao.facecook.view.newfeed;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.view.CircleImageView;
 
 /**
  * Created by utnam on 4/10/2018.
@@ -24,10 +26,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Post> postList;
+    private IOnClickItemNewFeed mIOnClickItemNewFeed;
 
-    public PostAdapter(Context mContext, List<Post> postList) {
+    public PostAdapter(Context mContext, List<Post> postList, IOnClickItemNewFeed iOnClickItemNewFeed) {
         this.mContext = mContext;
         this.postList = postList;
+        this.mIOnClickItemNewFeed = iOnClickItemNewFeed;
     }
 
 
@@ -50,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Post post = postList.get(position);
         if (post != null) {
             switch (holder.getItemViewType()) {
@@ -61,8 +65,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((MyViewHolder) holder).txtLikeCount.setText(post.getmLikeList().size() + " like");
                     ((MyViewHolder) holder).txtCommentCount.setText(post.getmCommentList().size() + " Comment");
                     ((MyViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
-                    //TODO IMG
-                    //holder.imgAvater.setBackground("");
+                    Picasso.with(mContext).load(post.getImgAvatar()).into(((MyViewHolder) holder).imgAvater);
+                    ((MyViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mIOnClickItemNewFeed.onClickItemComment(position);
+                        }
+                    });
+
                     break;
                 case 2:
                     ((ImgViewHolder) holder).txtName.setText(post.getName());
@@ -71,7 +81,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((ImgViewHolder) holder).txtLikeCount.setText(post.getmLikeList().size() + " like");
                     ((ImgViewHolder) holder).txtCommentCount.setText(post.getmCommentList().size() + " Comment");
                     ((ImgViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
+                    Picasso.with(mContext).load(post.getImgAvatar()).into(((ImgViewHolder) holder).imgAvater);
                     Picasso.with(mContext).load(post.getUrlImg()).into(((ImgViewHolder) holder).imgPost);
+                    ((ImgViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mIOnClickItemNewFeed.onClickItemComment(position);
+                        }
+                    });
                     break;
                 default:
                     break;
@@ -109,10 +126,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView txtName;
         public TextView txtConten;
         public TextView txtTime;
-        public ImageView imgAvater;
+        public CircleImageView imgAvater;
         public TextView txtLikeCount;
         public TextView txtShareCount;
         public TextView txtCommentCount;
+        public ImageView imgComment;
+        public LinearLayout lnComment;
+
         public MyViewHolder(View view) {
             super(view);
 
@@ -123,6 +143,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtLikeCount = view.findViewById(R.id.txtLikeCount);
             txtCommentCount = view.findViewById(R.id.txtCommentCount);
             txtShareCount = view.findViewById(R.id.txtShareCount);
+            imgComment = view.findViewById(R.id.imgComment);
+            lnComment = view.findViewById(R.id.lnComment);
 
         }
     }
@@ -131,12 +153,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView txtName;
         public TextView txtConten;
         public TextView txtTime;
-        public ImageView imgAvater;
+        public CircleImageView imgAvater;
         public ImageView imgPost;
         public TextView txtLikeCount;
         public TextView txtShareCount;
         public TextView txtCommentCount;
-
+        public ImageView imgComment;
+        public LinearLayout lnComment;
 
         public ImgViewHolder(View itemView) {
             super(itemView);
@@ -148,7 +171,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtLikeCount = itemView.findViewById(R.id.txtLikeCount);
             txtCommentCount = itemView.findViewById(R.id.txtCommentCount);
             txtShareCount = itemView.findViewById(R.id.txtShareCount);
-
+            imgComment = itemView.findViewById(R.id.imgComment);
+            lnComment = itemView.findViewById(R.id.lnComment);
         }
     }
 }

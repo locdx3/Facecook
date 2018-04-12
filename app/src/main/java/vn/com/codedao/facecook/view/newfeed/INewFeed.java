@@ -2,6 +2,7 @@ package vn.com.codedao.facecook.view.newfeed;
 
 import java.util.List;
 
+import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Post;
 
 /**
@@ -10,4 +11,6 @@ import vn.com.codedao.facecook.model.newfeed.Post;
 
 public interface INewFeed {
     void setApdater(List<Post> posts);
+
+    void setAdapterComment(List<Comment> comments);
 }
