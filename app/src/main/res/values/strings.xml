@@ -13,6 +13,11 @@
     <!--Start string for loginScreen-->
     <string name="err_msg_name">username fomat fail</string>
     <string name="err_msg_password">password fomat fail</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+    <string name="textregister">No account yet? Create one</string>
+    <string name="sign_in_facebook">Sign in with Facebook</string>
+    <string name="sign_in_google">Sign in with Google</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,8 +1,11 @@
 package vn.com.codedao.facecook.view.login;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +15,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import vn.com.codedao.facecook.R;
@@ -24,30 +28,29 @@ import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
 import vn.com.codedao.facecook.view.home.Home;
 
 public class Login extends AppCompatActivity implements iLoginView, View.OnClickListener {
-    private EditText edusername, edpassword;
-    private Button mBtnlogin, mBtnRegister;
+    private EditText mEdusername, mEdpassword;
+    private TextView mTvRegister;
+    private Button mBtnlogin;
     private TextInputLayout input_layout_Username, input_layout_Password;
     private ProgressBar pbmainlogin;
     SharedPreferences LuuUser;
     public static final String MyPREFERENCES = "luutruthongtin";
     boolean visible;
-    ViewGroup transitionsContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        transitionsContainer = findViewById(R.id.transitions_containe);
 //        LuuUser = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        getSupportActionBar().hide();
         init();
         action();
     }
 
     private void action() {
+        mTvRegister.setOnClickListener(this);
         mBtnlogin.setOnClickListener(this);
-        mBtnRegister.setOnClickListener(this);
-
-        edusername.addTextChangedListener(new TextWatcher() {
+        mEdusername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -64,7 +67,7 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
             }
         });
 
-        edpassword.addTextChangedListener(new TextWatcher() {
+        mEdpassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -84,18 +87,18 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
 
     private void init() {
         pbmainlogin = findViewById(R.id.pbmainlogin);
-        edusername = findViewById(R.id.txtusername);
-        edpassword = findViewById(R.id.txtpassword);
-        mBtnlogin = transitionsContainer.findViewById(R.id.btnLogin);
-        mBtnRegister = findViewById(R.id.btnRegister);
+        mEdusername = findViewById(R.id.edUsername);
+        mEdpassword = findViewById(R.id.edPassword);
+        mBtnlogin = findViewById(R.id.btnLogin);
+        mTvRegister = findViewById(R.id.tvRegister);
         input_layout_Username = findViewById(R.id.input_layout_Username);
         input_layout_Password = findViewById(R.id.input_layout_Password);
     }
 
     private boolean validateUsename() {
-        if (!validatePhone(edusername) && !validateEmail(edusername)) {
+        if (!validatePhone(mEdusername) && !validateEmail(mEdusername)) {
             input_layout_Username.setError(getString(R.string.err_msg_name));
-            requestFocus(edusername);
+            requestFocus(mEdusername);
             return false;
         } else {
             input_layout_Username.setErrorEnabled(false);
@@ -121,9 +124,9 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     }
 
     private boolean validatePassword() {
-        if (edpassword.getText().toString().trim().isEmpty()) {
+        if (mEdpassword.getText().toString().trim().isEmpty()) {
             input_layout_Password.setError(getString(R.string.err_msg_password));
-            requestFocus(edpassword);
+            requestFocus(mEdpassword);
             return false;
         } else {
             input_layout_Password.setErrorEnabled(false);
@@ -143,9 +146,9 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     protected void onResume() {
         if (getRole().equalsIgnoreCase("")) {
             mBtnlogin.setEnabled(true);
-            edusername.setEnabled(true);
-            edpassword.setEnabled(true);
-            edusername.requestFocus();
+            mEdusername.setEnabled(true);
+            mEdpassword.setEnabled(true);
+            mEdusername.requestFocus();
         } else {
 
         }
@@ -169,8 +172,8 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
     public void loginFail(String status) {
         pbmainlogin.setVisibility(View.GONE);
         mBtnlogin.setEnabled(true);
-        edusername.setEnabled(true);
-        edpassword.setEnabled(true);
+        mEdusername.setEnabled(true);
+        mEdpassword.setEnabled(true);
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
@@ -187,15 +190,30 @@ public class Login extends AppCompatActivity implements iLoginView, View.OnClick
                 } else {
                     pbmainlogin.setVisibility(View.VISIBLE);
                     mBtnlogin.setEnabled(false);
-                    edusername.setEnabled(false);
-                    edpassword.setEnabled(false);
+                    mEdusername.setEnabled(false);
+                    mEdpassword.setEnabled(false);
                     PresenterLogicHandleLogin presenterLogicHandleLogin
                             = new PresenterLogicHandleLogin(this);
-                    presenterLogicHandleLogin.checkLogin(edusername.getText().toString(),
-                            edpassword.getText().toString());
+                    presenterLogicHandleLogin.checkLogin(mEdusername.getText().toString(),
+                            mEdpassword.getText().toString());
                 }
                 break;
-            case R.id.btnRegister:
+            case R.id.tvRegister:
+                // custom dialog
+                final Dialog dialog = new Dialog(Login.this, R.style.PauseDialog);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                dialog.setContentView(R.layout.register_layout);
+
+                Button btnRegister = dialog.findViewById(R.id.btnRegister);
+                // if button is clicked, close the custom dialog
+                btnRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                dialog.show();
                 break;
             default:
                 break;

@@ -15,7 +15,7 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
 
     @Override
     public void checkLogin(String userName, String passWord) {
-        if (userName.equals("locdx3") && passWord.equals("1234")) {
+        if (userName.equals("locdx3@gmail.com") && passWord.equals("1234")) {
             mILoginView.loginSuccess();
         } else {
             mILoginView.loginFail("username fail");

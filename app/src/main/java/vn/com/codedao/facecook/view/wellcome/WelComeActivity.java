@@ -15,6 +15,7 @@ public class WelComeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wel_come);
+        getSupportActionBar().hide();
         delayToHomeSreen();
     }
 
