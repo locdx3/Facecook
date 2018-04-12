@@ -2,8 +2,11 @@ package vn.com.codedao.facecook.presenter.newfeed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import vn.com.codedao.facecook.model.newfeed.mPost;
+import vn.com.codedao.facecook.model.newfeed.Comment;
+import vn.com.codedao.facecook.model.newfeed.Like;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.view.newfeed.INewFeed;
 
 /**
@@ -20,15 +23,85 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
 
     @Override
     public void getListPost() {
-        List<mPost> mPosts = new ArrayList<>();
 
-        mPosts.add(new mPost("Hoang Nam ","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",2,99,2,2,"http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-1.jpg"));
-        mPosts.add(new mPost("QuyenNH ","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",2,2,4,6,"http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-6.jpg"));
-        mPosts.add(new mPost("Dao Xuan Loc ","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",2,999,10,88,"http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-12.jpg"));
-        mPosts.add(new mPost("Tre Trau ","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",1,99999,10,8));
-        mPosts.add(new mPost("NamHV ","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",1,777,3,1));
-        mPosts.add(new mPost("LocDX","1 hrs","Test","Trăm năm trong cõi người ta, Chữ tài chữ mệnh khéo là ghét nhau. Trải qua một cuộc bể dâu, Những điều trông thấy mà đau đớn lòng",2,99999,10,3,"http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-1.jpg"));
+        List<Post> posts = new ArrayList<>();
+        Post p = new Post();
+        p.setName("NamHV4");
+        p.setConten("Làm gì cũng nên tin rằng mình làm được thì nhất định sẽ thành công =)))");
+        p.setTime("1 hrs");
+        p.setmLikeList(likeListFake());
+        p.setmCommentList(commentListFake());
+        posts.add(p);
 
-        mINewFeed.setApdater(mPosts);
+        Post p1 = new Post();
+        p1.setName("QuyenCV1");
+        p1.setConten("Làm gì cũng nên tin rằng mình làm được thì nhất định sẽ thành công =)))");
+        p1.setTime("3 hrs");
+        p1.setType(2);
+        p1.setmLikeList(likeListFake());
+        p1.setmCommentList(commentListFake());
+        p1.setUrlImg("https://kenh14cdn.com/2017/17-1511843044269.jpg");
+        p1.setmShareCount(89);
+        posts.add(p1);
+
+        Post p2 = new Post();
+        p2.setName("LocDX3");
+        p2.setConten("Hãy cùng ngắm thêm một số hình ảnh của cô bạn nhé");
+        p2.setTime("2 hrs");
+        p2.setmLikeList(likeListFake());
+        p2.setmCommentList(commentListFake());
+        p2.setUrlImg("https://kenh14cdn.com/thumb_w/660/2017/10-1511843120161.jpg");
+        p2.setmShareCount(999);
+        posts.add(p2);
+
+        Post p3 = new Post();
+        p3.setName("QuyenNH");
+        p3.setConten("Hãy cùng ngắm thêm một số hình ảnh của cô bạn nhé");
+        p3.setTime("5 hrs");
+        p3.setmLikeList(likeListFake());
+        p3.setmCommentList(commentListFake());
+        p3.setmShareCount(10);
+        posts.add(p3);
+
+        Post p4 = new Post();
+        p4.setName("Hoàng Văn Nam");
+        p4.setConten("Ngon Vãi loằn ");
+        p4.setTime("1 hrs");
+        p4.setmLikeList(likeListFake());
+        p4.setmCommentList(commentListFake());
+        p4.setmShareCount(200);
+        p4.setUrlImg("https://s.hswstatic.com/gif/10-food-beautiful-skin-8.jpg");
+        posts.add(p4);
+
+
+        Post p5 = new Post();
+        p5.setName("Đào Xuân Lộc");
+        p5.setConten("To reduce dryness and inflammation, count on Omega-3. This agent is found in seafood and if you aren’t getting enough of it, you may experience eczema and psoriasis. ");
+        p5.setTime("10 hrs");
+        p5.setmLikeList(likeListFake());
+        p5.setmCommentList(commentListFake());
+        p5.setmShareCount(100);
+        p5.setUrlImg("https://s.hswstatic.com/gif/10-food-beautiful-skin-10.jpg");
+        posts.add(p5);
+
+
+        mINewFeed.setApdater(posts);
+    }
+
+    private List<Like> likeListFake(){
+        List<Like> likes = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i <random.nextInt(100) ; i++) {
+            likes.add(new Like(i,"2018-04-"+i));
+        }
+        return likes;
+    }
+    private List<Comment> commentListFake(){
+        List<Comment> comment = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i <random.nextInt(100) ; i++) {
+            comment.add(new Comment(i,"Commen "+i,"2018-04-"+i,"2018-04-"+i));
+        }
+        return comment;
     }
 }

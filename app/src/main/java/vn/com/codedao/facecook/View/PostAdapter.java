@@ -2,6 +2,7 @@ package vn.com.codedao.facecook.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import vn.com.codedao.facecook.model.newfeed.mPost;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.R;
 
 /**
@@ -22,11 +23,11 @@ import vn.com.codedao.facecook.R;
 public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<mPost> mPostList;
+    private List<Post> postList;
 
-    public PostAdapter(Context mContext, List<mPost> mPostList) {
+    public PostAdapter(Context mContext, List<Post> postList) {
         this.mContext = mContext;
-        this.mPostList = mPostList;
+        this.postList = postList;
     }
 
 
@@ -50,15 +51,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        mPost post = mPostList.get(position);
+        Post post = postList.get(position);
         if (post != null) {
-            switch (post.getType()) {
+            switch (holder.getItemViewType()) {
                 case 1:
                     ((MyViewHolder) holder).txtName.setText(post.getName());
                     ((MyViewHolder) holder).txtTime.setText(post.getTime());
                     ((MyViewHolder) holder).txtConten.setText(post.getConten());
-                    ((MyViewHolder) holder).txtLikeCount.setText(post.getmLikeCount() + " like");
-                    ((MyViewHolder) holder).txtCommentCount.setText(post.getmCommentCount() + " Comment");
+                    ((MyViewHolder) holder).txtLikeCount.setText(post.getmLikeList().size() + " like");
+                    ((MyViewHolder) holder).txtCommentCount.setText(post.getmCommentList().size() + " Comment");
                     ((MyViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
                     //TODO IMG
                     //holder.imgAvater.setBackground("");
@@ -67,8 +68,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((ImgViewHolder) holder).txtName.setText(post.getName());
                     ((ImgViewHolder) holder).txtTime.setText(post.getTime());
                     ((ImgViewHolder) holder).txtConten.setText(post.getConten());
-                    ((ImgViewHolder) holder).txtLikeCount.setText(post.getmLikeCount() + " like");
-                    ((ImgViewHolder) holder).txtCommentCount.setText(post.getmCommentCount() + " Comment");
+                    ((ImgViewHolder) holder).txtLikeCount.setText(post.getmLikeList().size() + " like");
+                    ((ImgViewHolder) holder).txtCommentCount.setText(post.getmCommentList().size() + " Comment");
                     ((ImgViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
                     Picasso.with(mContext).load(post.getUrlImg()).into(((ImgViewHolder) holder).imgPost);
                     break;
@@ -80,7 +81,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 //    @Override
 //    public void onBindViewHolder(MyViewHolder holder, int position) {
-//        mPost post = mPostList.get(position);
+//        Post post = postList.get(position);
 //        holder.txtName.setText(post.getName());
 //        holder.txtTime.setText(post.getTime());
 //        holder.txtConten.setText(post.getConten());
@@ -90,15 +91,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mPostList == null ? 0 : mPostList.size();
+        return postList == null ? 0 : postList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mPostList != null) {
-            mPost post = mPostList.get(position);
+        if (postList != null) {
+            Post post = postList.get(position);
             if (post != null) {
-                return post.getType();
+                return TextUtils.isEmpty(post.getUrlImg()) ? 1 : 2;
             }
         }
         return 0;
@@ -112,7 +113,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView txtLikeCount;
         public TextView txtShareCount;
         public TextView txtCommentCount;
-
         public MyViewHolder(View view) {
             super(view);
 

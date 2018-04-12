@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import vn.com.codedao.facecook.R;
-import vn.com.codedao.facecook.model.newfeed.mPost;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.view.PostAdapter;
 
@@ -44,11 +44,11 @@ public class FragmentNewFeed extends Fragment implements INewFeed {
     }
 
     @Override
-    public void setApdater(List<mPost> posts) {
+    public void setApdater(List<Post> posts) {
         mPostAdapter = new PostAdapter(getActivity(), posts);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(50));
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mPostAdapter);
         mPostAdapter.notifyDataSetChanged();

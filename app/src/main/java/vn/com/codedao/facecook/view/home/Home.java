@@ -5,8 +5,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,17 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
-
 import vn.com.codedao.facecook.R;
-import vn.com.codedao.facecook.model.newfeed.mPost;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.view.PostAdapter;
 import vn.com.codedao.facecook.view.friend.FragmentFriend;
 import vn.com.codedao.facecook.view.menu.FragmentMenu;
 import vn.com.codedao.facecook.view.newfeed.FragmentNewFeed;
-import vn.com.codedao.facecook.view.newfeed.INewFeed;
-import vn.com.codedao.facecook.view.newfeed.SpacesItemDecoration;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
