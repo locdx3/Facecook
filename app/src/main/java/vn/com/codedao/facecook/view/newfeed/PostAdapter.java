@@ -81,8 +81,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((ImgViewHolder) holder).txtLikeCount.setText(post.getmLikeList().size() + " like");
                     ((ImgViewHolder) holder).txtCommentCount.setText(post.getmCommentList().size() + " Comment");
                     ((ImgViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
-                    Picasso.with(mContext).load(post.getImgAvatar()).into(((ImgViewHolder) holder).imgAvater);
-                    Picasso.with(mContext).load(post.getUrlImg()).into(((ImgViewHolder) holder).imgPost);
+                    Picasso.with(mContext)
+                            .load(post.getImgAvatar())
+                            .into(((ImgViewHolder) holder).imgAvater);
+                    Picasso.with(mContext)
+                            .load(post.getUrlImg())
+                            .fit()
+                            .centerCrop()
+                            .into(((ImgViewHolder) holder).imgPost);
                     ((ImgViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
