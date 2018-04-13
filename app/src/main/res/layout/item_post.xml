@@ -7,18 +7,18 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_5sdp"
+        android:layout_margin="@dimen/_3sdp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <vn.com.codedao.facecook.view.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            <vn.com.codedao.facecook.view.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/imgAvatar"
-                android:layout_margin="@dimen/_5sdp"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
+                android:layout_margin="@dimen/_5sdp"
                 android:src="@drawable/avatar" />
 
             <TextView
@@ -46,6 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imgAvatar"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:text="@string/contenTest" />
 
             <RelativeLayout
@@ -55,32 +56,35 @@
                 android:layout_below="@+id/txtConten">
 
                 <ImageView
-                    android:layout_margin="@dimen/_2sdp"
                     android:id="@+id/imglike"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_margin="@dimen/_2sdp"
                     android:background="@drawable/likepost" />
+
                 <TextView
-                    android:layout_margin="@dimen/_3sdp"
-                    android:text="2 like"
-                    android:layout_toEndOf="@+id/imglike"
                     android:id="@+id/txtLikeCount"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_toEndOf="@+id/imglike"
+                    android:text="2 like" />
+
                 <TextView
-                    android:layout_margin="@dimen/_3sdp"
                     android:id="@+id/txtCommentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
                     android:layout_toStartOf="@+id/txtShareCount"
-                    android:text="3 Comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:text="3 Comment" />
+
                 <TextView
-                    android:layout_margin="@dimen/_3sdp"
                     android:id="@+id/txtShareCount"
-                    android:text="2 Share"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="2 Share" />
             </RelativeLayout>
 
             <View
@@ -100,10 +104,10 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_alignParentStart="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -123,9 +127,9 @@
 
                 <LinearLayout
                     android:id="@+id/lnComment"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -146,10 +150,10 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
