@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
+import vn.com.codedao.facecook.presenter.register.PresenterLogicHandleRegister;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.view.home.Home;
 
@@ -34,8 +35,12 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     public static final String TAG = "Login";
     private EditText mEdusername, mEdpassword;
     private TextView mTvRegister;
-    private Button mBtnlogin;
+    private Button mBtnlogin, btnRegister;
     private TextInputLayout input_layout_Username, input_layout_Password;
+    private TextInputLayout input_Username_r;
+    private TextInputLayout input_Password_r;
+    private TextInputLayout input_Password_again_r;
+    private EditText username_r, password_r, password_agian_r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,20 +118,11 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 
     @Override
     protected void onResume() {
-        if (getRole().equalsIgnoreCase("")) {
-            mBtnlogin.setEnabled(true);
-            mEdusername.setEnabled(true);
-            mEdpassword.setEnabled(true);
-            mEdusername.requestFocus();
-        } else {
-
-        }
+        mBtnlogin.setEnabled(true);
+        mEdusername.setEnabled(true);
+        mEdpassword.setEnabled(true);
+        mEdusername.requestFocus();
         super.onResume();
-    }
-
-    public String getRole() {
-        SharedPreferences luuUser = getSharedPreferences("luutruthongtin", Context.MODE_PRIVATE);
-        return luuUser.getString("role", "");
     }
 
     @Override
@@ -142,6 +138,22 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         mBtnlogin.setEnabled(true);
         mEdusername.setEnabled(true);
         mEdpassword.setEnabled(true);
+        Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void registerSuccess() {
+        Intent intent = new Intent(Login.this, Home.class);
+        startActivity(intent);
+        this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+    }
+
+    @Override
+    public void registerFail(String status) {
+        btnRegister.setEnabled(true);
+        username_r.setEnabled(true);
+        password_r.setEnabled(true);
+        password_agian_r.setEnabled(true);
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
@@ -194,14 +206,14 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dialog.setContentView(R.layout.register_layout);
-        final TextInputLayout input_Username_r = dialog.findViewById(R.id.input_Username_register);
-        final TextInputLayout input_Password_r = dialog.findViewById(R.id.input_Password_register);
-        final TextInputLayout input_Password_again_r = dialog.findViewById(R.id.input_Password_agian_register);
-        final EditText username_r = dialog.findViewById(R.id.username_register);
-        final EditText password_r = dialog.findViewById(R.id.password_register);
-        final EditText password_agian_r = dialog.findViewById(R.id.password_again_register);
+        input_Username_r = dialog.findViewById(R.id.input_Username_register);
+        input_Password_r = dialog.findViewById(R.id.input_Password_register);
+        input_Password_again_r = dialog.findViewById(R.id.input_Password_agian_register);
+        username_r = dialog.findViewById(R.id.username_register);
+        password_r = dialog.findViewById(R.id.password_register);
+        password_agian_r = dialog.findViewById(R.id.password_again_register);
 
-        Button btnRegister = dialog.findViewById(R.id.btnRegister);
+        btnRegister = dialog.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +228,14 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
                     Toast.makeText(Login.this, "PasssWord agian is Invalid",
                             Toast.LENGTH_LONG).show();
                 } else {
-
+                    btnRegister.setEnabled(false);
+                    username_r.setEnabled(false);
+                    password_r.setEnabled(false);
+                    password_agian_r.setEnabled(false);
+                    PresenterLogicHandleRegister presenterLogicHandleRegister
+                            = new PresenterLogicHandleRegister(Login.this, Login.this);
+                    presenterLogicHandleRegister.register(username_r.getText().toString(),
+                            password_r.getText().toString());
                 }
             }
         });
@@ -321,7 +340,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         if (pw2.getText().toString().trim().isEmpty() || !pw1.getText().toString().trim()
                 .equals(pw2.getText().toString().trim())) {
             textInputLayout.setError(getString(R.string.err_msg_password_again));
-            requestFocus(pw2);
+            requestFocus(pw1);
             return false;
         } else {
             textInputLayout.setErrorEnabled(false);

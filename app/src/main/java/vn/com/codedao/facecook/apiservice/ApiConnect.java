@@ -46,4 +46,24 @@ public class ApiConnect {
             }
         });
     }
+
+    public void register(String username, String password) {
+        Call<Mlogin> call = mApi.register(username, password);
+        call.enqueue(new Callback<Mlogin>() {
+            @Override
+            public void onResponse(Call<Mlogin> call, Response<Mlogin> response) {
+                Mlogin reponse = response.body();
+                Log.d(TAG, "onResponse iduser : " + reponse.getId());
+                MessageEvent messageEvent = new MessageEvent();
+                messageEvent.setmEvent(Constant.DATAREGISTER);
+                messageEvent.setmMlogin(reponse);
+                EventBus.getDefault().post(messageEvent);
+            }
+
+            @Override
+            public void onFailure(Call<Mlogin> call, Throwable t) {
+                Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+            }
+        });
+    }
 }

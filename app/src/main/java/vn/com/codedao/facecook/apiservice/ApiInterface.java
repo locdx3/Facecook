@@ -19,4 +19,12 @@ public interface ApiInterface {
     })
     @POST("Auth/login")
     Call<Mlogin> login(@Field("username") String username, @Field("password") String password);
+
+    @FormUrlEncoded
+    @Headers({
+            "Client-Service: frontend-client",
+            "Auth-Key: simplerestapi"
+    })
+    @POST("Auth/register")
+    Call<Mlogin> register(@Field("username") String username, @Field("password") String password);
 }

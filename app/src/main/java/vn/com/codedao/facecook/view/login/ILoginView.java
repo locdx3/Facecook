@@ -7,4 +7,6 @@ package vn.com.codedao.facecook.view.login;
 public interface ILoginView {
     void loginSuccess();
     void loginFail(String status);
+    void registerSuccess();
+    void registerFail(String status);
 }
