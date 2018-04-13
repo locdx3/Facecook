@@ -11,8 +11,9 @@
     <string name="welComeActivity_hello_facecook">Cùng facecook chia sẻ nhưng khoảng khắc tuyệt vời!</string>
 
     <!--Start string for loginScreen-->
-    <string name="err_msg_name">username fomat fail</string>
-    <string name="err_msg_password">password fomat fail</string>
+    <string name="err_msg_name">The username must be an email or phone number</string>
+    <string name="err_msg_password">Password must be at least 6 characters</string>
+    <string name="err_msg_password_again">Password and password again must be the same</string>
     <string name="sign_in">Sign in</string>
     <string name="register">Register</string>
     <string name="textregister">No account yet? Create one</string>

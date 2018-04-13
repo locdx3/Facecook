@@ -5,5 +5,9 @@ package vn.com.codedao.facecook.presenter.login;
  */
 
 public interface IPresenterHandleLogin {
-    void checkLogin(String userName,String passWord);
+    void checkLogin(String userName, String passWord);
+
+    void loginWithFB();
+
+    void loginWithGG();
 }

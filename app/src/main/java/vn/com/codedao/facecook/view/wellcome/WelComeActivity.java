@@ -31,6 +31,7 @@ public class WelComeActivity extends AppCompatActivity {
                     Intent intent = new Intent(WelComeActivity.this, Login.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
+                    WelComeActivity.this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
                     finish();
                 }
             }
