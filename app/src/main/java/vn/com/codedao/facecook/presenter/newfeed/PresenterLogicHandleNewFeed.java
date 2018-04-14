@@ -99,7 +99,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         List<Comment> comment = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < random.nextInt(100); i++) {
-            comment.add(new Comment(i, "Commen " + i, "2018-04-" + i, "2018-04-" + i));
+            comment.add(new Comment(i, "Vĩ dụ các ngày bình thường trong năm ấy vì anh chưa có lịch cụ thể em ơi " + i, "2018-04-" + i, "2018-04-" + i));
         }
         mINewFeed.setAdapterComment(comment);
     }
@@ -117,7 +117,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         List<Comment> comment = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < random.nextInt(100); i++) {
-            comment.add(new Comment(i, "Commen " + i, "2018-04-" + i, "2018-04-" + i));
+            comment.add(new Comment(i, "Vĩ dụ các ngày bình thường trong năm ấy vì anh chưa có lịch cụ thể em ơi " + i, "2018-04-" + i, "2018-04-" + i));
         }
         return comment;
     }

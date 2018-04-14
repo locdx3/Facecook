@@ -4,16 +4,19 @@ package vn.com.codedao.facecook.view.newfeed;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,6 +42,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     private Dialog dialog;
     private CommentAdapter mCommentAdapter;
     private RecyclerView mRecyclerViewComment;
+    PopupWindow mPopWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,22 +79,94 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void onClickItemComment(int position) {
-        dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_comment);
-        TextView txtDone = dialog.findViewById(R.id.txtDone);
-        EditText editText = dialog.findViewById(R.id.edComment);
-        mRecyclerViewComment = dialog.findViewById(R.id.rcComment);
+//        dialog = new Dialog(getActivity(),R.style.DialogAnimation_2);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.dialog_comment);
+//        TextView txtDone = dialog.findViewById(R.id.txtDone);
+//        EditText editText = dialog.findViewById(R.id.edComment);
+//        mRecyclerViewComment = dialog.findViewById(R.id.rcComment);
+//        mPresenterLogicHandleHome.getListComment();
+//        editText.requestFocus();
+//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+//        txtDone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.hide();
+//            }
+//        });
+//        WindowManager.LayoutParams lp = new  WindowManager.LayoutParams();
+//        lp.copyFrom(dialog.getWindow().getAttributes());
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//        dialog.show();
+//        dialog.getWindow().setAttributes(lp);
+        onShowPopup(getView());
+
+    }
+
+
+    public void onShowPopup(View v) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate the custom popup layout
+        final View inflatedView = layoutInflater.inflate(R.layout.dialog_comment, null, false);
+        // find the ListView in the popup layout
+        // ListView listView = (ListView)inflatedView.findViewById(R.id.commentsListView);
+        mRecyclerViewComment = inflatedView.findViewById(R.id.rcComment);
         mPresenterLogicHandleHome.getListComment();
-        editText.requestFocus();
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        TextView txtDone = inflatedView.findViewById(R.id.txtDone);
+        final EditText editText = inflatedView.findViewById(R.id.edComment);
+
+
         txtDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.hide();
+                mPopWindow.dismiss();
             }
         });
-        dialog.show();
+        // get device size
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        final Point size = new Point();
+        display.getSize(size);
+
+        // set height depends on the device size
+        mPopWindow = new PopupWindow(inflatedView, size.x, size.y - 800, true);
+        // set a background drawable with rounders corners
+        mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.fb_popup_bg));
+        mPopWindow.setAnimationStyle(R.style.DialogAnimation_2);
+        // make it focusable to show the keyboard to enter in `EditText`
+        mPopWindow.setFocusable(true);
+        // make it outside touchable to dismiss the popup window
+        mPopWindow.setOutsideTouchable(true);
+
+        // show the popup at bottom of the screen and set some margin at bottom ie,
+        mPopWindow.showAtLocation(v, Gravity.TOP, 0, 0);
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == true){
+                    InputMethodManager inputMgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    inputMgr.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+                    mPopWindow.update();
+
+                }
+            }
+        });
+        editText.requestFocus();
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                InputMethodManager inputMgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMgr.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                inputMgr.showSoftInput(getView(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        });
+
     }
+
+
 }

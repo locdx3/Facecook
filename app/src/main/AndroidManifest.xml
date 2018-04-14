@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".view.home.Home"
             android:theme="@style/AppTheme.NoActionBar">
             >
