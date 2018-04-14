@@ -20,13 +20,16 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import vn.com.codedao.facecook.R;
-import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
 import vn.com.codedao.facecook.presenter.register.PresenterLogicHandleRegister;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.view.home.Home;
@@ -41,12 +44,16 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private TextInputLayout input_Password_r;
     private TextInputLayout input_Password_again_r;
     private EditText username_r, password_r, password_agian_r;
+    private ImageView mImgLogo;
+    private TranslateAnimation animate;
+    private LinearLayout mLinearWapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
         if (checkAuthen()) {
             Intent intent = new Intent(Login.this, Home.class);
             startActivity(intent);
@@ -56,6 +63,9 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         }
         init();
         action();
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
+
+
     }
 
     private boolean checkAuthen() {
@@ -66,6 +76,43 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
             return false;
         } else {
             return true;
+        }
+    }
+
+    // slide the view from below itself to the current position
+    public void slideUp(final View view) {
+        view.setVisibility(View.VISIBLE);
+        animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                view.getHeight(),  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(2000);
+        animate.setFillAfter(true);
+        view.requestLayout();
+        view.startAnimation(animate);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mLinearWapper.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            Log.d(TAG, "onWindowFocusChanged() called with: hasFocus = [" + hasFocus + "]");
+            slideUp(mImgLogo);
         }
     }
 
@@ -108,12 +155,15 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     }
 
     private void init() {
+        mLinearWapper = findViewById(R.id.lnWapper);
+        mImgLogo = findViewById(R.id.imgLogo);
         mEdusername = findViewById(R.id.edUsername);
         mEdpassword = findViewById(R.id.edPassword);
         mBtnlogin = findViewById(R.id.btnLogin);
         mTvRegister = findViewById(R.id.tvRegister);
         input_layout_Username = findViewById(R.id.input_layout_Username);
         input_layout_Password = findViewById(R.id.input_layout_Password);
+
     }
 
     @Override
@@ -161,22 +211,24 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin:
-                if (!validateUsename(mEdusername, input_layout_Username)) {
-                    Toast.makeText(Login.this, "UserName is Invalid",
-                            Toast.LENGTH_LONG).show();
-                } else if (!validatePassword(mEdpassword, input_layout_Password)) {
-                    Toast.makeText(Login.this, "PasssWord is Invalid",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Log.d(TAG, "onClick() called with: v = [" + v + "]");
-                    mBtnlogin.setEnabled(false);
-                    mEdusername.setEnabled(false);
-                    mEdpassword.setEnabled(false);
-                    PresenterLogicHandleLogin presenterLogicHandleLogin
-                            = new PresenterLogicHandleLogin(this, this);
-                    presenterLogicHandleLogin.checkLogin(mEdusername.getText().toString(),
-                            mEdpassword.getText().toString());
-                }
+                Intent intent = new Intent(Login.this, Home.class);
+                startActivity(intent);
+//                if (!validateUsename(mEdusername, input_layout_Username)) {
+//                    Toast.makeText(Login.this, "UserName is Invalid",
+//                            Toast.LENGTH_LONG).show();
+//                } else if (!validatePassword(mEdpassword, input_layout_Password)) {
+//                    Toast.makeText(Login.this, "PasssWord is Invalid",
+//                            Toast.LENGTH_LONG).show();
+//                } else {
+//                    Log.d(TAG, "onClick() called with: v = [" + v + "]");
+//                    mBtnlogin.setEnabled(false);
+//                    mEdusername.setEnabled(false);
+//                    mEdpassword.setEnabled(false);
+//                    PresenterLogicHandleLogin presenterLogicHandleLogin
+//                            = new PresenterLogicHandleLogin(this, this);
+//                    presenterLogicHandleLogin.checkLogin(mEdusername.getText().toString(),
+//                            mEdpassword.getText().toString());
+//                }
                 break;
             case R.id.tvRegister:
                 // custom dialog
