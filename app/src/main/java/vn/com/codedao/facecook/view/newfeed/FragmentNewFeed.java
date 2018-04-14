@@ -1,7 +1,6 @@
 package vn.com.codedao.facecook.view.newfeed;
 
 
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Point;
@@ -39,10 +38,10 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     private PresenterLogicHandleNewFeed mPresenterLogicHandleHome;
     private PostAdapter mPostAdapter;
     private RecyclerView mRecyclerView;
-    private Dialog dialog;
     private CommentAdapter mCommentAdapter;
     private RecyclerView mRecyclerViewComment;
     PopupWindow mPopWindow;
+    TextView mTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +68,9 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void setAdapterComment(List<Comment> comments) {
+        if (comments.size() == 0) {
+            mTextView.setVisibility(View.VISIBLE);
+        }
         mCommentAdapter = new CommentAdapter(comments);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerViewComment.setLayoutManager(mLayoutManager);
@@ -79,30 +81,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void onClickItemComment(int position) {
-//        dialog = new Dialog(getActivity(),R.style.DialogAnimation_2);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.dialog_comment);
-//        TextView txtDone = dialog.findViewById(R.id.txtDone);
-//        EditText editText = dialog.findViewById(R.id.edComment);
-//        mRecyclerViewComment = dialog.findViewById(R.id.rcComment);
-//        mPresenterLogicHandleHome.getListComment();
-//        editText.requestFocus();
-//        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-//        txtDone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.hide();
-//            }
-//        });
-//        WindowManager.LayoutParams lp = new  WindowManager.LayoutParams();
-//        lp.copyFrom(dialog.getWindow().getAttributes());
-//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//
-//        dialog.show();
-//        dialog.getWindow().setAttributes(lp);
         onShowPopup(getView());
-
     }
 
 
@@ -118,6 +97,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mPresenterLogicHandleHome.getListComment();
         TextView txtDone = inflatedView.findViewById(R.id.txtDone);
         final EditText editText = inflatedView.findViewById(R.id.edComment);
+        mTextView = inflatedView.findViewById(R.id.txtNocomment);
 
 
         txtDone.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +127,8 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus == true){
-                    InputMethodManager inputMgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (hasFocus == true) {
+                    InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                     inputMgr.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
                     mPopWindow.update();
@@ -160,7 +140,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                InputMethodManager inputMgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMgr.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 inputMgr.showSoftInput(getView(), InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
