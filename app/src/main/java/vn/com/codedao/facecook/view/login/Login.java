@@ -45,11 +45,12 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private TextInputLayout input_Password_again_r;
     private EditText username_r, password_r, password_agian_r;
     private ImageView mImgLogo;
-    private TranslateAnimation animate;
     private LinearLayout mLinearWapper;
+    private boolean isAnimation = true, isAnimationsilein = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
@@ -63,9 +64,12 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         }
         init();
         action();
-        Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
+    }
 
-
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart() called");
+        super.onStart();
     }
 
     private boolean checkAuthen() {
@@ -81,8 +85,12 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 
     // slide the view from below itself to the current position
     public void slideUp(final View view) {
+        if (!isAnimation) {
+            return;
+        }
+        isAnimation = false;
         view.setVisibility(View.VISIBLE);
-        animate = new TranslateAnimation(
+        TranslateAnimation animate = new TranslateAnimation(
                 0,                 // fromXDelta
                 0,                 // toXDelta
                 view.getHeight(),  // fromYDelta
@@ -98,7 +106,43 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mLinearWapper.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    // slide the view from below itself to the current position
+    public void slideOut(final View view) {
+        if (!isAnimationsilein) {
+            return;
+        }
+        isAnimationsilein = false;
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animatesilein = new TranslateAnimation(
+                -view.getWidth(),                 // fromXDelta
+                0,                 // toXDelta
+                0,  // fromYDelta
+                0);                // toYDelta
+
+//        android:fromXDelta="100%p"
+//        android:toXDelta="0"
+//        android:fromYDelta="0%"
+//        android:toXDelta="-100%p"
+        animatesilein.setDuration(3000);
+        animatesilein.setFillAfter(true);
+        view.requestLayout();
+        view.startAnimation(animatesilein);
+        animatesilein.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
             }
 
             @Override
@@ -113,6 +157,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         if (hasFocus) {
             Log.d(TAG, "onWindowFocusChanged() called with: hasFocus = [" + hasFocus + "]");
             slideUp(mImgLogo);
+            slideOut(mLinearWapper);
         }
     }
 
@@ -406,5 +451,12 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
             getWindow().setSoftInputMode(WindowManager
                     .LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        isAnimation = true;
+        isAnimationsilein = true;
+        super.onDestroy();
     }
 }

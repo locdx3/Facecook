@@ -16,9 +16,10 @@
         <EditText
             android:id="@+id/username_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginBottom="@dimen/_8sdp"
             android:layout_marginTop="@dimen/_8sdp"
+            android:background="@android:drawable/editbox_background_normal"
             android:fontFamily="sans-serif"
             android:hint="Email Or Phonenumber"
             android:inputType="textEmailAddress"
@@ -37,8 +38,9 @@
         <EditText
             android:id="@+id/password_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@android:drawable/editbox_background_normal"
             android:fontFamily="sans-serif"
             android:hint="Password"
             android:inputType="textPassword"
@@ -57,8 +59,9 @@
         <EditText
             android:id="@+id/password_again_register"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_38sdp"
             android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@android:drawable/editbox_background_normal"
             android:fontFamily="sans-serif"
             android:hint="Password again"
             android:inputType="textPassword"
@@ -72,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         android:background="@drawable/press_signin"
+        android:layout_marginTop="@dimen/_8sdp"
         android:tag="custom_login_button"
         android:text="@string/register"
         android:textColor="@color/white" />
