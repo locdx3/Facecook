@@ -2,8 +2,6 @@ package vn.com.codedao.facecook.model.login;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
-
 /**
  * Created by Bruce Wayne on 10/04/2018.
  */
@@ -11,6 +9,8 @@ import java.util.Date;
 public class MUserProfile {
     @SerializedName("userid")
     private int userid;
+
+    private String name;
 
     @SerializedName("username")
     private String username;
@@ -27,60 +27,38 @@ public class MUserProfile {
     @SerializedName("urlavatar")
     private String urlavatar;
 
-    @SerializedName("age")
-    private int age;
-
     @SerializedName("sex")
-    private int sex;
+    private String sex;
 
     @SerializedName("address")
     private String address;
 
+    private String hometown;
+
     @SerializedName("phone")
     private String phone;
 
-    @SerializedName("gmail")
-    private String gmail;
+    @SerializedName("email")
+    private String email;
 
     @SerializedName("birthday")
-    private Date birthday;
+    private String birthday;
 
     @SerializedName("descripton")
     private String descripton;
 
     @SerializedName("last_login")
-    private Date last_login;
+    private String last_login;
 
     @SerializedName("datecreate")
-    private Date datecreate;
+    private String datecreate;
 
     @SerializedName("dateupdate")
-    private Date dateupdate;
+    private String dateupdate;
 
     public MUserProfile() {
     }
 
-    public MUserProfile(int userid, String username, String password, String firstname,
-                        String lastname, String urlavatar, int age, int sex, String address,
-                        String phone, String gmail, Date birthday, String descripton,
-                        Date last_login, Date datecreate, Date dateupdate) {
-        this.userid = userid;
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.urlavatar = urlavatar;
-        this.age = age;
-        this.sex = sex;
-        this.address = address;
-        this.phone = phone;
-        this.gmail = gmail;
-        this.birthday = birthday;
-        this.descripton = descripton;
-        this.last_login = last_login;
-        this.datecreate = datecreate;
-        this.dateupdate = dateupdate;
-    }
 
     public int getUserid() {
         return userid;
@@ -130,19 +108,11 @@ public class MUserProfile {
         this.urlavatar = urlavatar;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -162,19 +132,35 @@ public class MUserProfile {
         this.phone = phone;
     }
 
-    public String getGmail() {
-        return gmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Date getBirthday() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHometown() {
+        return hometown;
+    }
+
+    public void setHometown(String hometown) {
+        this.hometown = hometown;
+    }
+
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -186,27 +172,27 @@ public class MUserProfile {
         this.descripton = descripton;
     }
 
-    public Date getLast_login() {
+    public String getLast_login() {
         return last_login;
     }
 
-    public void setLast_login(Date last_login) {
+    public void setLast_login(String last_login) {
         this.last_login = last_login;
     }
 
-    public Date getDatecreate() {
+    public String getDatecreate() {
         return datecreate;
     }
 
-    public void setDatecreate(Date datecreate) {
+    public void setDatecreate(String datecreate) {
         this.datecreate = datecreate;
     }
 
-    public Date getDateupdate() {
+    public String getDateupdate() {
         return dateupdate;
     }
 
-    public void setDateupdate(Date dateupdate) {
+    public void setDateupdate(String dateupdate) {
         this.dateupdate = dateupdate;
     }
 }

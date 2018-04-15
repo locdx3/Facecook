@@ -29,16 +29,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+
+import java.util.Arrays;
+
 import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
 import vn.com.codedao.facecook.presenter.register.PresenterLogicHandleRegister;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.view.home.Home;
+import vn.com.codedao.facecook.view.personal.PersonalActivity;
 
 public class Login extends AppCompatActivity implements ILoginView, View.OnClickListener {
     public static final String TAG = "Login";
     private EditText mEdusername, mEdpassword;
     private TextView mTvRegister;
-    private Button mBtnlogin, btnRegister;
+    private Button mBtnlogin, mBtnLoginWithFB, mBtnLoginWithGG, btnRegister;
     private TextInputLayout input_layout_Username, input_layout_Password;
     private TextInputLayout input_Username_r;
     private TextInputLayout input_Password_r;
@@ -47,23 +57,55 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private ImageView mImgLogo;
     private LinearLayout mLinearWapper;
     private boolean isAnimation = true, isAnimationsilein = true;
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
+//        if (checkAuthen()) {
+//            Intent intent = new Intent(Login.this, Home.class);
+//            startActivity(intent);
+//            this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//        } else {
+//
+//        }
+        registerCallbackLoginFB();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-
-        if (checkAuthen()) {
-            Intent intent = new Intent(Login.this, Home.class);
-            startActivity(intent);
-            this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
-        } else {
-
-        }
         init();
         action();
+    }
+
+    private void registerCallbackLoginFB() {
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d(TAG, "onSuccess() called with: loginResult = [" + loginResult + "]");
+                        PresenterLogicHandleLogin presenterLogicHandleLogin
+                                = new PresenterLogicHandleLogin(Login.this, Login.this);
+                        presenterLogicHandleLogin.loginWithFB();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "onCancel() called");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.d(TAG, "onError() called with: exception = [" + exception + "]");
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -164,6 +206,8 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private void action() {
         mTvRegister.setOnClickListener(this);
         mBtnlogin.setOnClickListener(this);
+        mBtnLoginWithFB.setOnClickListener(this);
+        mBtnLoginWithGG.setOnClickListener(this);
         mEdusername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -205,6 +249,8 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         mEdusername = findViewById(R.id.edUsername);
         mEdpassword = findViewById(R.id.edPassword);
         mBtnlogin = findViewById(R.id.btnLogin);
+        mBtnLoginWithFB = findViewById(R.id.btn_facebook_login);
+        mBtnLoginWithGG = findViewById(R.id.btn_google_login);
         mTvRegister = findViewById(R.id.tvRegister);
         input_layout_Username = findViewById(R.id.input_layout_Username);
         input_layout_Password = findViewById(R.id.input_layout_Password);
@@ -256,24 +302,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin:
-                Intent intent = new Intent(Login.this, Home.class);
-                startActivity(intent);
-//                if (!validateUsename(mEdusername, input_layout_Username)) {
-//                    Toast.makeText(Login.this, "UserName is Invalid",
-//                            Toast.LENGTH_LONG).show();
-//                } else if (!validatePassword(mEdpassword, input_layout_Password)) {
-//                    Toast.makeText(Login.this, "PasssWord is Invalid",
-//                            Toast.LENGTH_LONG).show();
-//                } else {
-//                    Log.d(TAG, "onClick() called with: v = [" + v + "]");
-//                    mBtnlogin.setEnabled(false);
-//                    mEdusername.setEnabled(false);
-//                    mEdpassword.setEnabled(false);
-//                    PresenterLogicHandleLogin presenterLogicHandleLogin
-//                            = new PresenterLogicHandleLogin(this, this);
-//                    presenterLogicHandleLogin.checkLogin(mEdusername.getText().toString(),
-//                            mEdpassword.getText().toString());
-//                }
+                handleLogin();
                 break;
             case R.id.tvRegister:
                 // custom dialog
@@ -290,12 +319,33 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         }
     }
 
-    private void handleGgLogin() {
+    private void handleLogin() {
+        if (!validateUsename(mEdusername, input_layout_Username)) {
+            Toast.makeText(Login.this, "UserName is Invalid",
+                    Toast.LENGTH_LONG).show();
+        } else if (!validatePassword(mEdpassword, input_layout_Password)) {
+            Toast.makeText(Login.this, "PasssWord is Invalid",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Log.d(TAG, "handleLogin() called validate");
+            mBtnlogin.setEnabled(false);
+            mEdusername.setEnabled(false);
+            mEdpassword.setEnabled(false);
+            PresenterLogicHandleLogin presenterLogicHandleLogin
+                    = new PresenterLogicHandleLogin(this, this);
+            presenterLogicHandleLogin.checkLogin(mEdusername.getText().toString(),
+                    mEdpassword.getText().toString());
+        }
+    }
 
+    private void handleGgLogin() {
+        Intent intent = new Intent(Login.this, PersonalActivity.class);
+        startActivity(intent);
     }
 
     private void handleFbLogin() {
-
+        LoginManager.getInstance().logInWithReadPermissions(this,
+                Arrays.asList("user_photos", "email", "user_birthday", "user_location", "user_hometown", "public_profile"));
     }
 
     private void handleRegister() {
@@ -394,7 +444,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 
     private boolean validateUsename(EditText editText, TextInputLayout textInputLayout) {
         if (!validatePhone(editText) && !validateEmail(editText)) {
-            textInputLayout.setError(getString(R.string.err_msg_name));
+            textInputLayout.setError(getString(R.string.err_msg_username));
             requestFocus(editText);
             return false;
         } else {

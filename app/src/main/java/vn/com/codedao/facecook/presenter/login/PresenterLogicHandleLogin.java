@@ -10,6 +10,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import vn.com.codedao.facecook.apiservice.ApiConnect;
+import vn.com.codedao.facecook.model.login.MLoginFB;
+import vn.com.codedao.facecook.model.login.Mlogin;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
 import vn.com.codedao.facecook.view.login.ILoginView;
@@ -50,7 +52,8 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
     //    start login with facebook
     @Override
     public void loginWithFB() {
-
+        MLoginFB mLoginFB = new MLoginFB();
+        mLoginFB.loginWithFB();
     }
 
     //    end login with facebook
@@ -68,20 +71,40 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
     public void onMessageEvent(MessageEvent event) {
         switch (event.getmEvent()) {
             case Constant.DATALOGIN:
-                if (event.getmMlogin().getStatus().equals("200")) {
+                Mlogin mlogin = (Mlogin) event.getmMlogin();
+                if (mlogin.getStatus().equals("200")) {
                     SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Constant.ID, event.getmMlogin().getId());
-                    editor.putString(Constant.TOKEN, event.getmMlogin().getToken());
+                    editor.putString(Constant.ID, mlogin.getId());
+                    editor.putString(Constant.TOKEN, mlogin.getToken());
                     editor.commit();
                     mILoginView.loginSuccess();
-                } else if (event.getmMlogin().getStatus().equals("204")) {
+                } else if (mlogin.getStatus().equals("204")) {
                     mILoginView.loginFail("Username incorrect");
-                } else if (event.getmMlogin().getStatus().equals("205")) {
+                } else if (mlogin.getStatus().equals("205")) {
                     mILoginView.loginFail("Password incorrect");
                 } else {
                     mILoginView.loginFail("Login Fail");
                 }
+                break;
+            case Constant.DATALOGINFB:
+                Mlogin mloginfb = (Mlogin) event.getmMlogin();
+                if (mloginfb.getStatus().equals("200")) {
+                    SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constant.ID, mloginfb.getId());
+                    editor.putString(Constant.TOKEN, mloginfb.getToken());
+                    editor.commit();
+                    mILoginView.loginSuccess();
+                } else if (mloginfb.getStatus().equals("204")) {
+                    mILoginView.loginFail("Username incorrect");
+                } else if (mloginfb.getStatus().equals("205")) {
+                    mILoginView.loginFail("Password incorrect");
+                } else {
+                    mILoginView.loginFail("Login Fail");
+                }
+                break;
+            case Constant.DATALOGINGG:
                 break;
             default:
                 break;

@@ -11,6 +11,10 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name=".view.login.Login"
             android:label="@string/app_name">
@@ -21,13 +25,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:windowSoftInputMode="adjustPan"
             android:name=".view.home.Home"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             >
         </activity>
         <activity android:name=".view.wellcome.WelComeActivity" />
-        <activity android:name=".view.Comment.CommentActivity"></activity>
+        <activity android:name=".view.Comment.CommentActivity" />
+        <activity android:name=".view.personal.PersonalActivity"></activity>
     </application>
 
 </manifest>

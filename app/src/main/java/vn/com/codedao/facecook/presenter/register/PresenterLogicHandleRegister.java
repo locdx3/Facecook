@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import vn.com.codedao.facecook.apiservice.ApiConnect;
+import vn.com.codedao.facecook.model.login.Mlogin;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
 import vn.com.codedao.facecook.view.login.ILoginView;
@@ -44,11 +45,12 @@ public class PresenterLogicHandleRegister implements IPresenterHandleRegister {
     public void onMessageEvent(MessageEvent event) {
         switch (event.getmEvent()) {
             case Constant.DATAREGISTER:
-                if (event.getmMlogin().getStatus().equals("200")) {
+                Mlogin mloginfb = (Mlogin) event.getmMlogin();
+                if (mloginfb.getStatus().equals("200")) {
                     SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Constant.ID, event.getmMlogin().getId());
-                    editor.putString(Constant.TOKEN, event.getmMlogin().getToken());
+                    editor.putString(Constant.ID, mloginfb.getId());
+                    editor.putString(Constant.TOKEN, mloginfb.getToken());
                     editor.commit();
                     mILoginView.loginSuccess();
                 } else {
