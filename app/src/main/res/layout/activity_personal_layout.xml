@@ -88,7 +88,8 @@
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="@dimen/_100sdp"
                         android:padding="@dimen/_8sdp"
-                        android:visibility="gone" />
+                        android:src="@drawable/icon_username"
+                        android:visibility="visible" />
 
                     <ImageView
                         android:id="@+id/img_avatarUpdateHint"
@@ -96,7 +97,8 @@
                         android:layout_height="@dimen/_100sdp"
                         android:padding="@dimen/_8sdp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/icon_username" />
+                        android:src="@drawable/icon_username"
+                        android:visibility="gone" />
 
                     <RadioGroup
                         android:id="@+id/rgsexStudentUpdate"
@@ -170,6 +172,7 @@
                             android:singleLine="true"
                             android:textSize="20sp" />
                     </android.support.design.widget.TextInputLayout>
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/inputBirdayUpdate"
                         android:layout_width="match_parent"
@@ -289,7 +292,7 @@
                         android:textSize="20sp" />
                 </android.support.design.widget.TextInputLayout>
 
-                
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
