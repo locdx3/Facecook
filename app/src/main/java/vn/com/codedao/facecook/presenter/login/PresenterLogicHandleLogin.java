@@ -90,18 +90,9 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
             case Constant.DATALOGINFB:
                 Mlogin mloginfb = (Mlogin) event.getmMlogin();
                 if (mloginfb.getStatus().equals("200")) {
-                    SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Constant.ID, mloginfb.getId());
-                    editor.putString(Constant.TOKEN, mloginfb.getToken());
-                    editor.commit();
                     mILoginView.loginSuccess();
-                } else if (mloginfb.getStatus().equals("204")) {
-                    mILoginView.loginFail("Username incorrect");
-                } else if (mloginfb.getStatus().equals("205")) {
-                    mILoginView.loginFail("Password incorrect");
-                } else {
-                    mILoginView.loginFail("Login Fail");
+                } else{
+                    mILoginView.loginFail("Login Facebook Fail");
                 }
                 break;
             case Constant.DATALOGINGG:

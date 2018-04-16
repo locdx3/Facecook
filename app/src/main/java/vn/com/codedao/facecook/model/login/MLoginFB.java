@@ -69,7 +69,7 @@ public class MLoginFB {
                             GraphResponse response) {
                         MUserProfile mUserProfile = getFacebookData(object);
                         ApiConnect apiConnect = new ApiConnect();
-//                        apiConnect.loginWithFB(mUserProfile);
+                        apiConnect.loginWithFB(mUserProfile);
                     }
                 });
         Bundle parameters = new Bundle();
@@ -81,6 +81,7 @@ public class MLoginFB {
     private MUserProfile getFacebookData(JSONObject object) {
         Log.d(TAG, "getFacebookData() called with: object = [" + object.toString() + "]");
         try {
+            String time = DateFormat.getDateTimeInstance().format(new Date());
             MUserProfile mUserProfile = new MUserProfile();
             String id = object.getString("id");
             try {
@@ -93,47 +94,67 @@ public class MLoginFB {
                 return null;
             }
 
-//            bundle.putString("idFacebook", id);
+            mUserProfile.setFbid(id);
             if (object.has("name")) {
                 mUserProfile.setName(object.getString("name"));
                 Log.d(TAG, "getFacebookData() called with:" +
                         " name = [" + object.getString("name") + "]");
+            } else {
+                mUserProfile.setName("");
             }
             if (object.has("first_name")) {
                 mUserProfile.setFirstname(object.getString("first_name"));
                 Log.d(TAG, "getFacebookData() called with: " +
                         "first_name = [" + object.getString("first_name") + "]");
+            } else {
+                mUserProfile.setFirstname("");
             }
             if (object.has("last_name")) {
                 mUserProfile.setLastname(object.getString("last_name"));
                 Log.d(TAG, "getFacebookData() called with: " +
                         "last_name = [" + object.getString("last_name") + "]");
+            } else {
+                mUserProfile.setLastname("");
             }
             if (object.has("email")) {
                 mUserProfile.setEmail(object.getString("email"));
                 Log.d(TAG, "getFacebookData() called with: " +
                         "email = [" + object.getString("email") + "]");
+            } else {
+                mUserProfile.setEmail("");
             }
             if (object.has("gender")) {
                 mUserProfile.setSex(object.getString("gender"));
                 Log.d(TAG, "getFacebookData() called with: " +
                         "gender = [" + object.getString("gender") + "]");
+            } else {
+                mUserProfile.setSex("");
             }
             if (object.has("birthday")) {
                 mUserProfile.setBirthday(object.getString("birthday"));
                 Log.d(TAG, "getFacebookData() called with: " +
                         "birthday = [" + object.getString("birthday") + "]");
+            } else {
+                mUserProfile.setBirthday(time);
             }
             if (object.has("location")) {
                 mUserProfile.setAddress(object.getJSONObject("location").getString("name"));
                 Log.d(TAG, "getFacebookData() called with: location =" +
                         " [" + object.getJSONObject("location").getString("name") + "]");
+            } else {
+                mUserProfile.setAddress("");
             }
             if (object.has("hometown")) {
                 mUserProfile.setHometown(object.getJSONObject("hometown").getString("name"));
                 Log.d(TAG, "getFacebookData() called with: hometown  " +
                         "= [" + object.getJSONObject("hometown").getString("name") + "]");
+            } else {
+                mUserProfile.setHometown("");
             }
+            mUserProfile.setPassword("");
+            mUserProfile.setUsername("");
+            mUserProfile.setPhone("");
+            mUserProfile.setDescripton("");
             return mUserProfile;
         } catch (JSONException e) {
             Log.d(TAG, "Error parsing JSON");

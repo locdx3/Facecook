@@ -10,6 +10,10 @@ public class MUserProfile {
     @SerializedName("userid")
     private int userid;
 
+    @SerializedName("fbid")
+    private String fbid;
+
+    @SerializedName("name")
     private String name;
 
     @SerializedName("username")
@@ -194,5 +198,13 @@ public class MUserProfile {
 
     public void setDateupdate(String dateupdate) {
         this.dateupdate = dateupdate;
+    }
+
+    public String getFbid() {
+        return fbid;
+    }
+
+    public void setFbid(String fbid) {
+        this.fbid = fbid;
     }
 }

@@ -25,8 +25,9 @@ public interface ApiInterface {
             "Client-Service: locdx3",
             "Auth-Key: chandoi812"
     })
-    @POST("User/loginwithfb")
+    @POST("User/register")
     Call<Mlogin> loginWithFB(
+            @Field("fbid") String fbid,
             @Field("name") String name,
             @Field("username") String username,
             @Field("password") String password,
@@ -35,13 +36,11 @@ public interface ApiInterface {
             @Field("urlavatar") String urlavatar,
             @Field("sex") String sex,
             @Field("address") String address,
+            @Field("hometown") String hometown,
             @Field("phone") String phone,
             @Field("email") String email,
             @Field("birthday") String birthday,
-            @Field("descripton") String descripton,
-            @Field("email") String last_login,
-            @Field("birthday") String datecreate,
-            @Field("usernamea") String dateupdate);
+            @Field("descripton") String descripton);
 
     @FormUrlEncoded
     @Headers({

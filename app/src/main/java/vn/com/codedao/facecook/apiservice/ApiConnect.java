@@ -50,12 +50,11 @@ public class ApiConnect {
 
     public void loginWithFB(MUserProfile mUserProfile) {
         Log.d(TAG, "loginWithFB() called");
-        Call<Mlogin> call = mApi.loginWithFB(mUserProfile.getName(), mUserProfile.getUsername(),
-                mUserProfile.getPassword(), mUserProfile.getFirstname(), mUserProfile.getLastname(),
-                mUserProfile.getUrlavatar(), mUserProfile.getSex(), mUserProfile.getAddress(),
-                mUserProfile.getPhone(), mUserProfile.getEmail(), mUserProfile.getBirthday(),
-                mUserProfile.getDescripton(), mUserProfile.getLast_login(),
-                mUserProfile.getDatecreate(), mUserProfile.getDateupdate());
+        Call<Mlogin> call = mApi.loginWithFB(mUserProfile.getFbid(), mUserProfile.getName(),
+                mUserProfile.getUsername(), mUserProfile.getPassword(), mUserProfile.getFirstname(),
+                mUserProfile.getLastname(), mUserProfile.getUrlavatar(), mUserProfile.getSex(),
+                mUserProfile.getAddress(), mUserProfile.getHometown(), mUserProfile.getPhone(),
+                mUserProfile.getEmail(), mUserProfile.getBirthday(), mUserProfile.getDescripton());
         call.enqueue(new Callback<Mlogin>() {
             @Override
             public void onResponse(Call<Mlogin> call, Response<Mlogin> response) {
