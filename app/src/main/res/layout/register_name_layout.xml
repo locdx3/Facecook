@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_250sdp"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_8sdp"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_Name_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:textColorHint="@color/colorAccentwhite">
+
+        <EditText
+            android:id="@+id/edNameRegister"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_38sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:fontFamily="sans-serif"
+            android:hint="@string/username_hint_Update"
+            android:textColorHint="@color/colorAccentwhite"
+            android:textSize="14sp"
+            android:typeface="normal" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSMNameRgister"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/press_signin"
+        android:text="@string/text_button_submit"
+        android:textColor="@color/white" />
+</LinearLayout>

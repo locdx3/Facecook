@@ -8,6 +8,7 @@ public class Mlogin {
     private String status;
     private String id;
     private String token;
+    private String message;
 
     public String getStatus() {
         return status;
@@ -31,5 +32,13 @@ public class Mlogin {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

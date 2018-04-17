@@ -48,16 +48,17 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     public static final String TAG = "Login";
     private EditText mEdusername, mEdpassword;
     private TextView mTvRegister;
-    private Button mBtnlogin, mBtnLoginWithFB, mBtnLoginWithGG, btnRegister;
+    private Button mBtnlogin, mBtnLoginWithFB, mBtnLoginWithGG, btnRegister, mBtnSumit;
     private TextInputLayout input_layout_Username, input_layout_Password;
     private TextInputLayout input_Username_r;
     private TextInputLayout input_Password_r;
     private TextInputLayout input_Password_again_r;
-    private EditText username_r, password_r, password_agian_r;
+    private EditText username_r, password_r, password_agian_r, mNameUser;
     private ImageView mImgLogo;
     private LinearLayout mLinearWapper;
     private boolean isAnimation = true, isAnimationsilein = true;
     private CallbackManager mCallbackManager;
+    private Dialog mDialogRegister, mDialogRegisterName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,18 +284,31 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     }
 
     @Override
+    public void checkRegisterSuccess() {
+        mDialogRegister.cancel();
+        showDialogname();
+    }
+
+    @Override
+    public void checkRegisterFail(String status) {
+        btnRegister.setEnabled(false);
+        username_r.setEnabled(false);
+        password_r.setEnabled(false);
+        password_agian_r.setEnabled(false);
+        Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void registerSuccess() {
+        mDialogRegisterName.cancel();
         Intent intent = new Intent(Login.this, Home.class);
         startActivity(intent);
         this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+//        finish();
     }
 
     @Override
     public void registerFail(String status) {
-        btnRegister.setEnabled(true);
-        username_r.setEnabled(true);
-        password_r.setEnabled(true);
-        password_agian_r.setEnabled(true);
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
@@ -349,18 +363,41 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     }
 
     private void handleRegister() {
-        final Dialog dialog = new Dialog(Login.this, R.style.PauseDialog);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        dialog.setContentView(R.layout.register_layout);
-        input_Username_r = dialog.findViewById(R.id.input_Username_register);
-        input_Password_r = dialog.findViewById(R.id.input_Password_register);
-        input_Password_again_r = dialog.findViewById(R.id.input_Password_agian_register);
-        username_r = dialog.findViewById(R.id.username_register);
-        password_r = dialog.findViewById(R.id.password_register);
-        password_agian_r = dialog.findViewById(R.id.password_again_register);
+        showDialogRegister();
+    }
 
-        btnRegister = dialog.findViewById(R.id.btnRegister);
+    private void showDialogname() {
+        mDialogRegisterName = new Dialog(Login.this, R.style.PauseDialog);
+        mDialogRegisterName.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialogRegisterName.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mDialogRegisterName.setContentView(R.layout.register_name_layout);
+        mNameUser = mDialogRegisterName.findViewById(R.id.edNameRegister);
+        mBtnSumit = mDialogRegisterName.findViewById(R.id.btnSMNameRgister);
+        mBtnSumit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PresenterLogicHandleRegister presenterLogicHandleRegister
+                        = new PresenterLogicHandleRegister(Login.this, Login.this);
+                presenterLogicHandleRegister.register(username_r.getText().toString(),
+                        password_r.getText().toString(), mNameUser.getText().toString());
+            }
+        });
+        mDialogRegisterName.show();
+    }
+
+    private void showDialogRegister() {
+        mDialogRegister = new Dialog(Login.this, R.style.PauseDialog);
+        mDialogRegister.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialogRegister.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        mDialogRegister.setContentView(R.layout.register_layout);
+        input_Username_r = mDialogRegister.findViewById(R.id.input_Username_register);
+        input_Password_r = mDialogRegister.findViewById(R.id.input_Password_register);
+        input_Password_again_r = mDialogRegister.findViewById(R.id.input_Password_agian_register);
+        username_r = mDialogRegister.findViewById(R.id.username_register);
+        password_r = mDialogRegister.findViewById(R.id.password_register);
+        password_agian_r = mDialogRegister.findViewById(R.id.password_again_register);
+
+        btnRegister = mDialogRegister.findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -381,7 +418,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
                     password_agian_r.setEnabled(false);
                     PresenterLogicHandleRegister presenterLogicHandleRegister
                             = new PresenterLogicHandleRegister(Login.this, Login.this);
-                    presenterLogicHandleRegister.register(username_r.getText().toString(),
+                    presenterLogicHandleRegister.checkValidateRegister(username_r.getText().toString(),
                             password_r.getText().toString());
                 }
             }
@@ -439,7 +476,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
             }
         });
 
-        dialog.show();
+        mDialogRegister.show();
     }
 
     private boolean validateUsename(EditText editText, TextInputLayout textInputLayout) {

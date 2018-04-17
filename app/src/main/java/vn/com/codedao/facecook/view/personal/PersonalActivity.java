@@ -3,7 +3,6 @@ package vn.com.codedao.facecook.view.personal;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import vn.com.codedao.facecook.R;
-import vn.com.codedao.facecook.utils.RealPathUtil;
 
 public class PersonalActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
@@ -36,10 +34,10 @@ public class PersonalActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick() called with: view = [" + view + "]");
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_IMAGE);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(galleryIntent, PICK_IMAGE);
             }
         });
     }
@@ -59,6 +57,19 @@ public class PersonalActivity extends AppCompatActivity {
             Uri uri = data.getData();
             mImageViewAvatar.setImageURI(uri);
             uploadFiles(uri);
+//            if (data != null) {
+//                Uri contentURI = data.getData();
+//                try {
+//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+//                    String path = saveImage(bitmap);
+//                    Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+//                    imageview.setImageBitmap(bitmap);
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
         }
     }
 
@@ -97,33 +108,14 @@ public class PersonalActivity extends AppCompatActivity {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
-            Log.d(TAG, "getRealPathFromURI() called with: cursor == null");
             res = contentUri.getPath();
         } else {
             if (cursor.moveToFirst()) {
-                Log.d(TAG, "getRealPathFromURI() called with: cursor.moveToFirst() = true");
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                Log.d(TAG, "getRealPathFromURI() called with: column_index = [" + column_index + "]");
                 res = cursor.getString(column_index);
-                Log.d(TAG, "getRealPathFromURI() called with: res = [" + res + "]");
             }
-            Log.d(TAG, "getRealPathFromURI() called with: cursor.moveToFirst() = false");
             cursor.close();
         }
         return res;
     }
-
-    private String uriToFilename(Uri uri) {
-        String path = null;
-        if (Build.VERSION.SDK_INT < 11) {
-            path = RealPathUtil.getRealPathFromURI_BelowAPI11(this, uri);
-        } else if (Build.VERSION.SDK_INT < 19) {
-            path = RealPathUtil.getRealPathFromURI_API11to18(this, uri);
-        } else {
-            path = RealPathUtil.getRealPathFromURI_API19(this, uri);
-        }
-
-        return path;
-    }
-
 }

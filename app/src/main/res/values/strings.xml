@@ -31,6 +31,8 @@
     <string name="lastname_hint_Update">LastName</string>
     <string name="fisrtname_hint_Update">FirstName</string>
     <string name="Birthday_hint_Update">Birthhday</string>
+    <string name="text_button_submit">Submit</string>
+    <string name="name_hint_Register">Name</string>
     
     <!--End string for Register Screen-->
     <!-- TODO: Remove or change this placeholder text -->

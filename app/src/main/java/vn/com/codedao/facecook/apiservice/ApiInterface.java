@@ -48,5 +48,19 @@ public interface ApiInterface {
             "Auth-Key: chandoi812"
     })
     @POST("User/register")
-    Call<Mlogin> register(@Field("username") String username, @Field("password") String password);
+    Call<Mlogin> register(@Field("username") String username,
+                          @Field("password") String password,
+                          @Field("name") String name,
+                          @Field("fbid") String fbid);
+
+    @FormUrlEncoded
+    @Headers({
+            "Client-Service: locdx3",
+            "Auth-Key: chandoi812"
+    })
+    @POST("User/checkRegister")
+    Call<Mlogin> checkRegister(@Field("username") String username,
+                          @Field("password") String password);
+
+
 }

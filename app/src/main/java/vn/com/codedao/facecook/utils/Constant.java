@@ -10,6 +10,7 @@ public class Constant {
     public static final String DATALOGINFB = "dataloginfb";
     public static final String DATALOGINGG = "datalogingg";
     public static final String DATAREGISTER = "dataregister";
+    public static final String CHECKDATAREGISTER = "checkdataregister";
     public static final String ID = "User-ID";
     public static final String ID_DEFAULT = "no_id";
     public static final String TOKEN = "Authorization";

@@ -5,5 +5,6 @@ package vn.com.codedao.facecook.presenter.register;
  */
 
 public interface IPresenterHandleRegister {
-    void register(String userName, String passWord);
+    void checkValidateRegister(String userName, String passWord);
+    void register(String userName, String passWord,String name);
 }
