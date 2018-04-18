@@ -2,7 +2,6 @@ package vn.com.codedao.facecook.view.newfeed;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.R;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.view.CircleImageView;
 
 /**
@@ -32,6 +31,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mContext = mContext;
         this.postList = postList;
         this.mIOnClickItemNewFeed = iOnClickItemNewFeed;
+        Post p = new Post();
+        p.setType(0);
+        postList.add(0, p);
     }
 
 
@@ -39,6 +41,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
+            case 0:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_post_header, parent, false);
+                return new HeaderViewHolder(view);
             case 1:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_post, parent, false);
@@ -58,6 +64,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Post post = postList.get(position);
         if (post != null) {
             switch (holder.getItemViewType()) {
+                case 0:
+                    break;
                 case 1:
                     ((MyViewHolder) holder).txtName.setText(post.getName());
                     ((MyViewHolder) holder).txtTime.setText(post.getTime());
@@ -102,15 +110,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-//    @Override
-//    public void onBindViewHolder(MyViewHolder holder, int position) {
-//        Post post = postList.get(position);
-//        holder.txtName.setText(post.getName());
-//        holder.txtTime.setText(post.getTime());
-//        holder.txtConten.setText(post.getConten());
-//        //TODO IMG
-//        //holder.imgAvater.setBackground("");
-//    }
 
     @Override
     public int getItemCount() {
@@ -122,7 +121,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (postList != null) {
             Post post = postList.get(position);
             if (post != null) {
-                return TextUtils.isEmpty(post.getUrlImg()) ? 1 : 2;
+                //return TextUtils.isEmpty(post.getUrlImg()) ? 1 : 2;
+                return post.getType();
             }
         }
         return 0;
@@ -179,6 +179,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtShareCount = itemView.findViewById(R.id.txtShareCount);
             imgComment = itemView.findViewById(R.id.imgComment);
             lnComment = itemView.findViewById(R.id.lnComment);
+        }
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+
         }
     }
 }

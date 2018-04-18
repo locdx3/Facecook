@@ -31,6 +31,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         p.setTime("1 hrs");
         p.setImgAvatar("http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-6.jpg");
         p.setmLikeList(likeListFake());
+        p.setType(1);
         p.setmCommentList(commentListFake());
         posts.add(p);
 
@@ -54,6 +55,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         p2.setImgAvatar("http://2sao.vietnamnetjsc.vn/images/2017/09/03/06/48/hot-girl-2.jpg");
         p2.setmCommentList(commentListFake());
         p2.setUrlImg("https://kenh14cdn.com/thumb_w/660/2017/10-1511843120161.jpg");
+        p2.setType(2);
         p2.setmShareCount(999);
         posts.add(p2);
 
@@ -64,6 +66,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         p3.setTime("5 hrs");
         p3.setmLikeList(likeListFake());
         p3.setmCommentList(commentListFake());
+        p3.setType(1);
         p3.setmShareCount(10);
         posts.add(p3);
 
@@ -76,6 +79,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         p4.setmCommentList(commentListFake());
         p4.setmShareCount(200);
         p4.setUrlImg("https://s.hswstatic.com/gif/10-food-beautiful-skin-8.jpg");
+        p4.setType(2);
         posts.add(p4);
 
 
@@ -88,6 +92,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         p5.setmCommentList(commentListFake());
         p5.setmShareCount(100);
         p5.setUrlImg("https://s.hswstatic.com/gif/10-food-beautiful-skin-10.jpg");
+        p5.setType(2);
         posts.add(p5);
 
 
