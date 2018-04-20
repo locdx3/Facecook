@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MUserProfile {
     @SerializedName("userid")
-    private int userid;
+    private String userid;
 
     @SerializedName("fbid")
     private String fbid;
@@ -64,11 +64,11 @@ public class MUserProfile {
     }
 
 
-    public int getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(int userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 

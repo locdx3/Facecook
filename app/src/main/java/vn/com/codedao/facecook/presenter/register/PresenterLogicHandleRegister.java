@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import vn.com.codedao.facecook.apiservice.ApiConnect;
-import vn.com.codedao.facecook.model.login.Mlogin;
+import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
 import vn.com.codedao.facecook.view.login.ILoginView;
@@ -52,20 +52,21 @@ public class PresenterLogicHandleRegister implements IPresenterHandleRegister {
     public void onMessageEvent(MessageEvent event) {
         switch (event.getmEvent()) {
             case Constant.DATAREGISTER:
-                Mlogin mlogin = (Mlogin) event.getmMlogin();
+                MReponse mlogin = (MReponse) event.getmMRepone();
                 if (mlogin.getStatus().equals("200")) {
                     SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(Constant.ID, mlogin.getId());
+                    editor.putString(Constant.NICKNAME, mlogin.getName());
                     editor.putString(Constant.TOKEN, mlogin.getToken());
                     editor.commit();
-                    mILoginView.loginSuccess();
+                    mILoginView.registerSuccess();
                 } else {
-                    mILoginView.loginFail("Register Fail");
+                    mILoginView.registerFail("Register Fail");
                 }
                 break;
             case Constant.CHECKDATAREGISTER:
-                Mlogin mregister = (Mlogin) event.getmMlogin();
+                MReponse mregister = (MReponse) event.getmMRepone();
                 if (mregister.getStatus().equals("200")) {
                     Log.d(TAG, "onMessageEvent() called with: checkRegisterSuccess");
                     mILoginView.checkRegisterSuccess();

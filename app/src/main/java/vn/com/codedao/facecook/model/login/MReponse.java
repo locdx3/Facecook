@@ -4,11 +4,20 @@ package vn.com.codedao.facecook.model.login;
  * Created by Bruce Wayne on 13/04/2018.
  */
 
-public class Mlogin {
+public class MReponse {
     private String status;
+    private String name;
     private String id;
     private String token;
     private String message;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getStatus() {
         return status;

@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import vn.com.codedao.facecook.apiservice.ApiConnect;
 import vn.com.codedao.facecook.model.login.MLoginFB;
-import vn.com.codedao.facecook.model.login.Mlogin;
+import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
 import vn.com.codedao.facecook.view.login.ILoginView;
@@ -71,11 +71,12 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
     public void onMessageEvent(MessageEvent event) {
         switch (event.getmEvent()) {
             case Constant.DATALOGIN:
-                Mlogin mlogin = (Mlogin) event.getmMlogin();
+                MReponse mlogin = (MReponse) event.getmMRepone();
                 if (mlogin.getStatus().equals("200")) {
                     SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(Constant.ID, mlogin.getId());
+                    editor.putString(Constant.NICKNAME, mlogin.getName());
                     editor.putString(Constant.TOKEN, mlogin.getToken());
                     editor.commit();
                     mILoginView.loginSuccess();
@@ -88,8 +89,14 @@ public class PresenterLogicHandleLogin implements IPresenterHandleLogin {
                 }
                 break;
             case Constant.DATALOGINFB:
-                Mlogin mloginfb = (Mlogin) event.getmMlogin();
+                MReponse mloginfb = (MReponse) event.getmMRepone();
                 if (mloginfb.getStatus().equals("200")) {
+                    SharedPreferences sharedPref = mActivity.getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constant.ID, mloginfb.getId());
+                    editor.putString(Constant.NICKNAME, mloginfb.getName());
+                    editor.putString(Constant.TOKEN, mloginfb.getToken());
+                    editor.commit();
                     mILoginView.loginSuccess();
                 } else{
                     mILoginView.loginFail("Login Facebook Fail");

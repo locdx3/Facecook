@@ -42,7 +42,7 @@ import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
 import vn.com.codedao.facecook.presenter.register.PresenterLogicHandleRegister;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.view.home.Home;
-import vn.com.codedao.facecook.view.personal.PersonalActivity;
+import vn.com.codedao.facecook.view.updateuser.UpdateUserActivity;
 
 public class Login extends AppCompatActivity implements ILoginView, View.OnClickListener {
     public static final String TAG = "Login";
@@ -63,13 +63,13 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() called with: savedInstanceState = [" + savedInstanceState + "]");
-//        if (checkAuthen()) {
-//            Intent intent = new Intent(Login.this, Home.class);
-//            startActivity(intent);
-//            this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
-//        } else {
-//
-//        }
+        if (checkAuthen()) {
+            Intent intent = new Intent(Login.this, Home.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        } else {
+
+        }
         registerCallbackLoginFB();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -119,7 +119,9 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         SharedPreferences prefs = getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
         String id = prefs.getString(Constant.ID, Constant.ID_DEFAULT);
         String token = prefs.getString(Constant.TOKEN, Constant.TOKEN_DEFAULT);
-        if (id.equals(Constant.ID_DEFAULT) || token.equals(Constant.TOKEN_DEFAULT)) {
+        String name = prefs.getString(Constant.NICKNAME, Constant.NICKNAME_DEFAULT);
+        Log.d(TAG, "checkAuthen() called id = " + id + "---name : " + name);
+        if (id.equals(Constant.ID_DEFAULT)) {
             return false;
         } else {
             return true;
@@ -138,7 +140,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
                 0,                 // toXDelta
                 view.getHeight(),  // fromYDelta
                 0);                // toYDelta
-        animate.setDuration(2000);
+        animate.setDuration(600);
         animate.setFillAfter(true);
         view.requestLayout();
         view.startAnimation(animate);
@@ -175,7 +177,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 //        android:toXDelta="0"
 //        android:fromYDelta="0%"
 //        android:toXDelta="-100%p"
-        animatesilein.setDuration(3000);
+        animatesilein.setDuration(1000);
         animatesilein.setFillAfter(true);
         view.requestLayout();
         view.startAnimation(animatesilein);
@@ -272,6 +274,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         Intent intent = new Intent(Login.this, Home.class);
         startActivity(intent);
         this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        finish();
         Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show();
     }
 
@@ -291,10 +294,10 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
 
     @Override
     public void checkRegisterFail(String status) {
-        btnRegister.setEnabled(false);
-        username_r.setEnabled(false);
-        password_r.setEnabled(false);
-        password_agian_r.setEnabled(false);
+        btnRegister.setEnabled(true);
+        username_r.setEnabled(true);
+        password_r.setEnabled(true);
+        password_agian_r.setEnabled(true);
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
@@ -304,11 +307,16 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         Intent intent = new Intent(Login.this, Home.class);
         startActivity(intent);
         this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
-//        finish();
+        finish();
     }
 
     @Override
     public void registerFail(String status) {
+        btnRegister.setEnabled(true);
+        username_r.setEnabled(true);
+        password_r.setEnabled(true);
+        password_agian_r.setEnabled(true);
+        mNameUser.setEnabled(true);
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
     }
 
@@ -353,11 +361,15 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     }
 
     private void handleGgLogin() {
-        Intent intent = new Intent(Login.this, PersonalActivity.class);
+        Intent intent = new Intent(Login.this, UpdateUserActivity.class);
         startActivity(intent);
+//        Intent intent = new Intent(Login.this, Home.class);
+//        startActivity(intent);
+        this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
     private void handleFbLogin() {
+        Log.d(TAG, "handleFbLogin() called");
         LoginManager.getInstance().logInWithReadPermissions(this,
                 Arrays.asList("user_photos", "email", "user_birthday", "user_location", "user_hometown", "public_profile"));
     }
@@ -376,6 +388,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         mBtnSumit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick() called with: mBtnSumit is click");
                 PresenterLogicHandleRegister presenterLogicHandleRegister
                         = new PresenterLogicHandleRegister(Login.this, Login.this);
                 presenterLogicHandleRegister.register(username_r.getText().toString(),

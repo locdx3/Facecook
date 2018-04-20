@@ -2,6 +2,9 @@ package vn.com.codedao.facecook.view.menu;
 
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -18,7 +21,10 @@ import java.util.List;
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.menu.MMenu;
 import vn.com.codedao.facecook.presenter.menu.PresenterLogicHandleMenu;
+import vn.com.codedao.facecook.utils.Constant;
+import vn.com.codedao.facecook.view.login.Login;
 import vn.com.codedao.facecook.view.newfeed.SpacesItemDecoration;
+import vn.com.codedao.facecook.view.updateuser.UpdateUserActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +69,8 @@ public class FragmentMenu extends Fragment implements IFragmentMenu, IOnClickIte
         //TODO ItemClick
         switch (position) {
             case 0:
+                Intent trantisionUpdate = new Intent(getActivity(), UpdateUserActivity.class);
+                startActivity(trantisionUpdate);
                 Toast.makeText(getContext(), "Trang cá nhân", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
@@ -78,6 +86,12 @@ public class FragmentMenu extends Fragment implements IFragmentMenu, IOnClickIte
                 Toast.makeText(getContext(), "Trợ giúp", Toast.LENGTH_SHORT).show();
                 break;
             case 5:
+                SharedPreferences prefs = getActivity()
+                        .getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit().clear();
+                editor.commit();
+                Intent intent = new Intent(getActivity(), Login.class);
+                startActivity(intent);
                 Toast.makeText(getContext(), "LogOut", Toast.LENGTH_SHORT).show();
                 break;
             default:

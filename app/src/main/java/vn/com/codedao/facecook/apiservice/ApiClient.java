@@ -17,7 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    public static final String BASE_URL = "http://192.168.48.105/facebook/index.php/";
+//    public static final String BASE_URL = "http://192.168.48.105/facecook/index.php/";
+    public static final String BASE_URL = "http://vietanhlogistics.com/facecook/index.php/";
     public static final String TAG = "ApiClient";
     private static Retrofit retrofit = null;
     static HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {

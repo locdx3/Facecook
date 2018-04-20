@@ -6,7 +6,7 @@ package vn.com.codedao.facecook.utils;
 
 public class MessageEvent {
     private String mEvent;
-    private Object mMlogin;
+    private Object mMRepone;
 
     public String getmEvent() {
         return mEvent;
@@ -16,11 +16,11 @@ public class MessageEvent {
         this.mEvent = mEvent;
     }
 
-    public Object getmMlogin() {
-        return mMlogin;
+    public Object getmMRepone() {
+        return mMRepone;
     }
 
-    public void setmMlogin(Object mMlogin) {
-        this.mMlogin = mMlogin;
+    public void setmMRepone(Object mMRepone) {
+        this.mMRepone = mMRepone;
     }
 }

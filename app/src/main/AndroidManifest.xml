@@ -33,7 +33,7 @@
         </activity>
         <activity android:name=".view.wellcome.WelComeActivity" />
         <activity android:name=".view.Comment.CommentActivity" />
-        <activity android:name=".view.personal.PersonalActivity"></activity>
+        <activity android:name=".view.updateuser.UpdateUserActivity"></activity>
     </application>
 
 </manifest>

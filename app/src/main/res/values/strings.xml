@@ -28,16 +28,29 @@
     <!--Start string for Register Screen-->
     <string name="username_hint_Update">UserName</string>
     <string name="err_msg_username_Update">The username must be an email or phone number</string>
-    <string name="lastname_hint_Update">LastName</string>
     <string name="fisrtname_hint_Update">FirstName</string>
     <string name="Birthday_hint_Update">Birthhday</string>
     <string name="text_button_submit">Submit</string>
     <string name="name_hint_Register">Name</string>
-    
+
     <!--End string for Register Screen-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="comments">Comments</string>
     <string name="done">Done</string>
     <string name="write_a_comment">Write a comment...</string>
+
+    <!--start update user-->
+    <string name="nickname_hint_Update">NickName</string>
+    <string name="userName_hint_Update">Username</string>
+    <string name="password_hint_Update">Password</string>
+    <string name="firstname_hint_Update">FirstName</string>
+    <string name="lastname_hint_Update">LastName</string>
+    <string name="address_hint_Update">Address</string>
+    <string name="hometown_hint_Update">HomeTown</string>
+    <string name="phone_hint_Update">Phone</string>
+    <string name="email_hint_Update">Email</string>
+    <string name="birthday_hint_Update">Birthday</string>
+    <string name="permission_denied">permission denied</string>
+    <!--end update user-->
 </resources>

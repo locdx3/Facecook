@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:titleTextColor="#ffffff">
+
+        <ImageView
+            android:id="@+id/tvCancelUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:src="@drawable/icon_back" />
+
+        <TextView
+            android:id="@+id/tvtieuUpdate"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Edit User"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/tvEditUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:padding="@dimen/_8sdp"
+            android:text="Edit"
+            android:textSize="18sp"
+            android:textColor="@drawable/press_update_save"
+            />
+
+        <TextView
+            android:id="@+id/tvSaveUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:padding="@dimen/_8sdp"
+            android:text="Save"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:visibility="gone" />
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbarUpdate">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <vn.com.codedao.facecook.view.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/img_avatarUpdate"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:padding="@dimen/_8sdp"
+                        android:src="@drawable/avatar" />
+
+                    <ImageView
+                        android:id="@+id/img_avatarUpdateHint"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:padding="@dimen/_8sdp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_launcher"
+                        android:visibility="gone" />
+
+                    <RadioGroup
+                        android:id="@+id/rgsexUserUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <RadioButton
+                            android:id="@+id/rbFemaleUserUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:enabled="false"
+                            android:text="Male" />
+
+                        <RadioButton
+                            android:id="@+id/rbMaleUserUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:text="female" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <EditText
+                        android:id="@+id/edNickNameUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/nickname_hint_Update"
+                        android:singleLine="true"
+                        android:textSize="20sp" />
+
+
+                    <EditText
+                        android:id="@+id/edUserNameUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/userName_hint_Update"
+                        android:singleLine="true"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/edBirdayUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/birthday_hint_Update"
+                        android:singleLine="true"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/edAddressUpdate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/address_hint_Update"
+                        android:singleLine="true"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/linearLayoutUpdate"
+                android:orientation="vertical">
+
+
+                <EditText
+                    android:id="@+id/edFirstnameUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/firstname_hint_Update"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/edLastnameUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:hint="@string/lastname_hint_Update"
+                    android:paddingBottom="16dp"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+
+
+                <EditText
+                    android:id="@+id/edHometownUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:hint="@string/hometown_hint_Update"
+                    android:inputType="none"
+                    android:paddingBottom="16dp"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+
+
+                <EditText
+                    android:id="@+id/edPhoneUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/phone_hint_Update"
+                    android:padding="16dp"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/edEmailUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/email_hint_Update"
+                    android:padding="16dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
