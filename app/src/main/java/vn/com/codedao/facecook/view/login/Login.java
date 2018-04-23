@@ -1,15 +1,19 @@
 package vn.com.codedao.facecook.view.login;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
@@ -59,6 +63,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private boolean isAnimation = true, isAnimationsilein = true;
     private CallbackManager mCallbackManager;
     private Dialog mDialogRegister, mDialogRegisterName;
+    private final int REQUEST_CODE_FOR_NETWORK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +117,33 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     @Override
     protected void onStart() {
         Log.d(TAG, "onStart() called");
+//        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+//                Manifest.permission.ACCESS_NETWORK_STATE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            Log.d(TAG, "onStart() !PERMISSION_GRANTED");
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.ACCESS_NETWORK_STATE)) {
+//                Log.d(TAG, "onStart() called shouldShowRequestPermissionRationale");
+//            } else {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
+//                        REQUEST_CODE_FOR_NETWORK);
+//                Log.d(TAG, "onStart() called requestPermissions");
+//            }
+//        }
         super.onStart();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_CODE_FOR_NETWORK) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //What to do if User allowed SMS permission
+            } else {
+                //What to do if user disallowed requested SMS permission
+            }
+        }
     }
 
     private boolean checkAuthen() {

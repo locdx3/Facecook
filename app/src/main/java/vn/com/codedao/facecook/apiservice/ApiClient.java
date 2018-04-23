@@ -2,6 +2,9 @@ package vn.com.codedao.facecook.apiservice;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-//    public static final String BASE_URL = "http://192.168.48.105/facecook/index.php/";
-    public static final String BASE_URL = "http://vietanhlogistics.com/facecook/index.php/";
+    public static final String BASE_URL = "http://192.168.48.105/facecook/index.php/";
+//    public static final String BASE_URL = "http://vietanhlogistics.com/facecook/index.php/";
     public static final String TAG = "ApiClient";
     private static Retrofit retrofit = null;
     static HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -29,6 +32,9 @@ public class ApiClient {
     });
 
     public static Retrofit getClient() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
         if (retrofit==null) {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             CookieHandler cookieHandler = new CookieManager();
@@ -38,7 +44,11 @@ public class ApiClient {
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .build();
-            retrofit = new Retrofit.Builder().baseUrl(BASE_URL).client(client).addConverterFactory(GsonConverterFactory.create()).build();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
         }
         return retrofit;
     }

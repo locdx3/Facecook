@@ -19,4 +19,5 @@ public class Constant {
     public static final String TOKEN = "Authorization";
     public static final String TOKEN_DEFAULT = "no_authorization";
     public static final String NICKNAME_DEFAULT = "-1";
+    public static final String REQUEST_UPDATE_IMAGE = "request_update";
 }

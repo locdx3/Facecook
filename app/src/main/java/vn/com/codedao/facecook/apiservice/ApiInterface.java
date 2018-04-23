@@ -85,6 +85,7 @@ public interface ApiInterface {
     Call<MReponse> updateUser(
             @Part MultipartBody.Part filePart,
             @Part("userid") RequestBody userid,
+            @Part("urlavatar") RequestBody urlavatar,
             @Part("name") RequestBody name,
             @Part("username") RequestBody username,
             @Part("firstname") RequestBody firstname,

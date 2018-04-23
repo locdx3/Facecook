@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
@@ -22,7 +25,10 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -30,6 +36,7 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.login.MUserProfile;
 import vn.com.codedao.facecook.presenter.updateuser.PresenterLogicHandleUpdateUser;
 import vn.com.codedao.facecook.utils.Constant;
+import vn.com.codedao.facecook.utils.ScalingUtilities;
 import vn.com.codedao.facecook.view.CircleImageView;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -47,6 +54,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
     private String sex;
     RequestBody requestBody;
     File file;
+    private String mAvatar;
 
 
     @Override
@@ -115,6 +123,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
                 MUserProfile mUserProfile = new MUserProfile();
                 mUserProfile.setUserid(getidUser());
                 mUserProfile.setSex(sex);
+                mUserProfile.setUrlavatar(mAvatar);
                 mUserProfile.setName(mEdNickName.getText().toString());
                 mUserProfile.setUsername(mEdUserName.getText().toString());
                 mUserProfile.setBirthday(mEdBirthday.getText().toString());
@@ -157,6 +166,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
                 data.getData() != null) {
             Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
             // Khi đã chọn xong ảnh thì chúng ta tiến hành upload thôi
+            mAvatar = Constant.REQUEST_UPDATE_IMAGE;
             Uri uri = data.getData();
             mImageViewAvatar.setImageURI(uri);
             uploadFiles(uri);
@@ -165,7 +175,6 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
 
     public void uploadFiles(Uri uri) {
         if (uri == null) return;
-        // Hàm call api sẽ mất 1 thời gian nên mình show 1 dialog nhé.
         file = new File(getRealPathFromURI(uri));
         // Khởi tạo RequestBody từ file đã được chọn
         requestBody = RequestBody.create(
@@ -264,7 +273,8 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
 
     @Override
     public void updategetUser(MUserProfile mUserProfile) {
-        if (!mUserProfile.getUrlavatar().equals("")) {
+        mAvatar = mUserProfile.getUrlavatar();
+        if (mUserProfile.getUrlavatar() != null && !mUserProfile.getUrlavatar().isEmpty()) {
             Picasso.with(this)
                     .load(mUserProfile.getUrlavatar())
                     .placeholder(R.drawable.camera)
@@ -281,11 +291,66 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
         mEdPhone.setText(mUserProfile.getPhone());
         mEdEmail.setText(mUserProfile.getEmail());
         if (mUserProfile.getSex().equals("male")) {
+            sex = "male";
             mMaleRadioButton.setChecked(true);
             mFemaleRadioButton.setChecked(false);
         } else {
+            sex = "female";
             mMaleRadioButton.setChecked(false);
             mFemaleRadioButton.setChecked(true);
         }
+    }
+
+    private String decodeFile(String path, int DESIREDWIDTH, int DESIREDHEIGHT) {
+        String strMyImagePath = null;
+        Bitmap scaledBitmap = null;
+
+        try {
+            // Part 1: Decode image
+            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+
+            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+                // Part 2: Scale image
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+            } else {
+                unscaledBitmap.recycle();
+                return path;
+            }
+
+            // Store to tmp file
+
+            String extr = Environment.getExternalStorageDirectory().toString();
+            File mFolder = new File(extr + "/TMMFOLDER");
+            if (!mFolder.exists()) {
+                mFolder.mkdir();
+            }
+
+            String s = "tmp.png";
+
+            File f = new File(mFolder.getAbsolutePath(), s);
+
+            strMyImagePath = f.getAbsolutePath();
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(f);
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 75, fos);
+                fos.flush();
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+                e.printStackTrace();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+            scaledBitmap.recycle();
+        } catch (Throwable e) {
+        }
+
+        if (strMyImagePath == null) {
+            return path;
+        }
+        return strMyImagePath;
     }
 }

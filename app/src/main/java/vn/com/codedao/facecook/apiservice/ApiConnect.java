@@ -8,6 +8,7 @@ import android.util.Log;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 
 import okhttp3.MediaType;
@@ -76,7 +77,17 @@ public class ApiConnect {
 
             @Override
             public void onFailure(Call<MReponse> call, Throwable t) {
-
+                String errorType, errorDesc;
+                if (t instanceof IOException) {
+                    errorType = "Timeout";
+                    errorDesc = String.valueOf(t.getCause());
+                } else if (t instanceof IllegalStateException) {
+                    errorType = "ConversionError";
+                    errorDesc = String.valueOf(t.getCause());
+                } else {
+                    errorType = "Other Error";
+                    errorDesc = String.valueOf(t.getLocalizedMessage());
+                }
             }
         });
     }
@@ -144,7 +155,7 @@ public class ApiConnect {
         });
     }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void UpdateUser(MUserProfile mUserProfile, File file, RequestBody requestBody) {
         RequestBody userid = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getUserid());
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getName());
@@ -158,12 +169,16 @@ public class ApiConnect {
         RequestBody email = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getEmail());
         RequestBody birthday = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getBirthday());
         RequestBody descripton = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getDescripton());
+        RequestBody urlavatar = RequestBody.create(MediaType.parse("text/plain"), mUserProfile.getUrlavatar());
         RequestBody dateupdate = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(LocalDate.now()));
         // Trong retrofit 2 để upload file ta sử dụng Multipart, khai báo 1 MultipartBody.Part
         // uploaded_file là key mà mình đã định nghĩa trong khi khởi tạo server
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+        MultipartBody.Part filePart = null;
+        if (file != null) {
+            filePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+        }
         Log.d(TAG, "uploadFiles() called with: filePart = [" + filePart + "]");
-        Call<MReponse> call = mApi.updateUser(filePart, userid, name, username, firstname, lastname, sex, address,
+        Call<MReponse> call = mApi.updateUser(filePart, userid, urlavatar, name, username, firstname, lastname, sex, address,
                 hometown, phone, email, birthday, descripton, dateupdate);
         call.enqueue(new Callback<MReponse>() {
             @Override
