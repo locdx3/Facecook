@@ -13,4 +13,6 @@ public interface INewFeed {
     void setApdater(List<Post> posts);
 
     void setAdapterComment(List<Comment> comments);
+
+    void checkInternet(boolean iscontect);
 }

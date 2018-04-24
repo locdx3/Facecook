@@ -1,5 +1,9 @@
 package vn.com.codedao.facecook.presenter.newfeed;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,6 +11,7 @@ import java.util.Random;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Like;
 import vn.com.codedao.facecook.model.newfeed.Post;
+import vn.com.codedao.facecook.utils.MessageEvent;
 import vn.com.codedao.facecook.view.newfeed.INewFeed;
 
 /**
@@ -18,6 +23,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
     private INewFeed mINewFeed;
 
     public PresenterLogicHandleNewFeed(INewFeed mINewFeed) {
+        EventBus.getDefault().register(this);
         this.mINewFeed = mINewFeed;
     }
 
@@ -97,6 +103,20 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
 
 
         mINewFeed.setApdater(posts);
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(MessageEvent event) {
+        switch (event.getmEvent()) {
+            case MessageEvent.CONNECT_INTERNET_OK:
+                mINewFeed.checkInternet(true);
+                break;
+            case MessageEvent.CONNECT_INTERNET_FAIL:
+                mINewFeed.checkInternet(false);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

@@ -5,6 +5,8 @@ package vn.com.codedao.facecook.utils;
  */
 
 public class MessageEvent {
+    public  static  final String CONNECT_INTERNET_OK ="CONNECT_INTERNET_OK";
+    public  static  final String CONNECT_INTERNET_FAIL ="CONNECT_INTERNET_FAIL";
     private String mEvent;
     private Object mMRepone;
 

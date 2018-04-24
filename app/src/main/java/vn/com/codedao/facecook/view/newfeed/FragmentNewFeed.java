@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -77,6 +78,15 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mRecyclerViewComment.setItemAnimator(new DefaultItemAnimator());
         mRecyclerViewComment.setAdapter(mCommentAdapter);
         mCommentAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void checkInternet(boolean iscontect) {
+        if (iscontect){
+            Toast.makeText(getActivity(), "Connect Internet Success", Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(getActivity(), "Connect Internet Fail", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

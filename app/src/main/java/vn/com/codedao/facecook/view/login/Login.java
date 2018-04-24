@@ -1,19 +1,19 @@
 package vn.com.codedao.facecook.view.login;
 
-import android.Manifest;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
@@ -45,8 +45,8 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.presenter.login.PresenterLogicHandleLogin;
 import vn.com.codedao.facecook.presenter.register.PresenterLogicHandleRegister;
 import vn.com.codedao.facecook.utils.Constant;
+import vn.com.codedao.facecook.utils.NetworkChangeReceiver;
 import vn.com.codedao.facecook.view.home.Home;
-import vn.com.codedao.facecook.view.updateuser.UpdateUserActivity;
 
 public class Login extends AppCompatActivity implements ILoginView, View.OnClickListener {
     public static final String TAG = "Login";
@@ -64,6 +64,7 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private CallbackManager mCallbackManager;
     private Dialog mDialogRegister, mDialogRegisterName;
     private final int REQUEST_CODE_FOR_NETWORK = 1;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,26 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
         getSupportActionBar().hide();
         init();
         action();
+        broadcastReceiver= new NetworkChangeReceiver();
+        registerNetworkBroadcastForNougat();
+    }
+
+    private void registerNetworkBroadcastForNougat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+
+    protected void unregisterNetworkChanges() {
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private void registerCallbackLoginFB() {
@@ -392,10 +413,10 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     }
 
     private void handleGgLogin() {
-        Intent intent = new Intent(Login.this, UpdateUserActivity.class);
-        startActivity(intent);
-//        Intent intent = new Intent(Login.this, Home.class);
+//        Intent intent = new Intent(Login.this, UpdateUserActivity.class);
 //        startActivity(intent);
+        Intent intent = new Intent(Login.this, Home.class);
+        startActivity(intent);
         this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 

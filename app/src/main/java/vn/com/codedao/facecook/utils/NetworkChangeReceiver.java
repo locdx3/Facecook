@@ -7,33 +7,44 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by Bruce Wayne on 21/04/2018.
  */
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
     private final String TAG = this.getClass().getSimpleName();
-
+    MessageEvent messageEvent = new MessageEvent();
     @Override
-    public void onReceive(final Context context, final Intent intent) {
-        Log.d(TAG, "onReceive() called with: context = [" + context + "], intent = [" + intent + "]");
-        final String action = intent.getAction();
-        switch (action) {
-            case ConnectivityManager.CONNECTIVITY_ACTION:
-                if (PermissionManager.isConnect(context)) {
-                    //do action here
-                    Log.d(TAG, "onReceive() called with: context = [" + context + "], intent = [" + intent + "]");
-                }
-                break;
+    public void onReceive(Context context, Intent intent)
+    {
+        try
+        {
+            if (isOnline(context)) {
+                messageEvent.setmEvent(MessageEvent.CONNECT_INTERNET_OK);
+                EventBus.getDefault().post(messageEvent);
+                Log.e(TAG, "Online Connect Intenet ");
+            } else {
+                messageEvent.setmEvent(MessageEvent.CONNECT_INTERNET_FAIL);
+                EventBus.getDefault().post(messageEvent);
+                Log.e(TAG, "Conectivity Failure !!! ");
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
-    public boolean isOnline(Context context) {
-
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        //should check null because in airplane mode it will be null
-        return (netInfo != null && netInfo.isConnected());
+    private boolean isOnline(Context context) {
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            //should check null because in airplane mode it will be null
+            return (netInfo != null && netInfo.isConnected());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
