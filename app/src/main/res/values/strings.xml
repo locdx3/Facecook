@@ -41,6 +41,7 @@
     <string name="write_a_comment">Write a comment...</string>
 
     <!--start update user-->
+    <string name="title_hint_Update">Edit details</string>
     <string name="nickname_hint_Update">NickName</string>
     <string name="userName_hint_Update">Username</string>
     <string name="password_hint_Update">Password</string>
@@ -50,6 +51,7 @@
     <string name="hometown_hint_Update">HomeTown</string>
     <string name="phone_hint_Update">Phone</string>
     <string name="email_hint_Update">Email</string>
+    <string name="description_hint_Update">description</string>
     <string name="birthday_hint_Update">Birthday</string>
     <string name="permission_denied">permission denied</string>
     <!--end update user-->

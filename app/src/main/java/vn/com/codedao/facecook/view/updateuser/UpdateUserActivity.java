@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +18,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +29,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,6 +40,7 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.login.MUserProfile;
 import vn.com.codedao.facecook.presenter.updateuser.PresenterLogicHandleUpdateUser;
 import vn.com.codedao.facecook.utils.Constant;
+import vn.com.codedao.facecook.utils.ScalingUtilities;
 import vn.com.codedao.facecook.view.CircleImageView;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -44,15 +51,16 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
     public final static int READ_EXTERNAL_REQUEST = 2;
     private TextView mBtnEdit, mBtnSave;
     private CircleImageView mImageViewAvatar;
-    private EditText mEdNickName, mEdUserName, mEdBirthday, mEdFirstName, mEdLastName;
-    private EditText mEdAddress, mEdHomeTown, mEdPhone, mEdEmail;
+    private EditText mEdNickName, mEdUserName, mEdBirthday, mEdFirstName,
+            mEdLastName, mEdAddress, mEdHomeTown, mEdPhone, mEdEmail, mEdDescription;
     private RadioGroup mRadioGroup;
     private RadioButton mFemaleRadioButton, mMaleRadioButton;
+    private ImageView mBtnCancel;
+    private ProgressBar mProgressBar;
     private String sex;
     RequestBody requestBody;
     File file;
     private String mAvatar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
         getSupportActionBar().hide();
         init();
         action();
+        mProgressBar.setVisibility(View.VISIBLE);
         PresenterLogicHandleUpdateUser updateuser =
                 new PresenterLogicHandleUpdateUser(UpdateUserActivity.this);
         updateuser.getUser(getidUser());
@@ -96,17 +105,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
             public void onClick(View v) {
                 mBtnSave.setVisibility(View.VISIBLE);
                 mBtnEdit.setVisibility(View.GONE);
-                mEdNickName.setEnabled(true);
-                mEdUserName.setEnabled(true);
-                mEdBirthday.setEnabled(true);
-                mEdFirstName.setEnabled(true);
-                mEdLastName.setEnabled(true);
-                mEdAddress.setEnabled(true);
-                mEdHomeTown.setEnabled(true);
-                mEdPhone.setEnabled(true);
-                mEdEmail.setEnabled(true);
-                mFemaleRadioButton.setEnabled(true);
-                mMaleRadioButton.setEnabled(true);
+                setEnabled(true);
             }
         });
 
@@ -114,9 +113,9 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 PresenterLogicHandleUpdateUser updateuser =
                         new PresenterLogicHandleUpdateUser(UpdateUserActivity.this);
-
                 MUserProfile mUserProfile = new MUserProfile();
                 mUserProfile.setUserid(getidUser());
                 mUserProfile.setSex(sex);
@@ -130,8 +129,14 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
                 mUserProfile.setAddress(mEdAddress.getText().toString());
                 mUserProfile.setHometown(mEdHomeTown.getText().toString());
                 mUserProfile.setEmail(mEdEmail.getText().toString());
-                mUserProfile.setDescripton("");
+                mUserProfile.setDescripton(mEdDescription.getText().toString());
                 updateuser.saveUpdateUser(mUserProfile, file, requestBody);
+            }
+        });
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -147,12 +152,14 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
         mEdHomeTown = findViewById(R.id.edHometownUpdate);
         mEdPhone = findViewById(R.id.edPhoneUpdate);
         mEdEmail = findViewById(R.id.edEmailUpdate);
+        mEdDescription = findViewById(R.id.edDescriptionUpdate);
         mRadioGroup = findViewById(R.id.rgsexUserUpdate);
         mMaleRadioButton = findViewById(R.id.rbMaleUserUpdate);
         mFemaleRadioButton = findViewById(R.id.rbFemaleUserUpdate);
         mBtnEdit = findViewById(R.id.tvEditUpdate);
         mBtnSave = findViewById(R.id.tvSaveUpdate);
-
+        mBtnCancel = findViewById(R.id.tvCancelUpdate);
+        mProgressBar = findViewById(R.id.pbUpdateUser);
     }
 
     @Override
@@ -231,12 +238,6 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
     }
 
     public void pickImage() {
-        // Gọi intent của hệ thống để chọn ảnh nhé.
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"),
-//                PICK_IMAGE_REQUEST);
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
@@ -245,31 +246,24 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
 
     @Override
     public void updateUserSuccess(String message) {
+        mProgressBar.setVisibility(View.GONE);
         mBtnEdit.setVisibility(View.VISIBLE);
         mBtnSave.setVisibility(View.GONE);
-        mEdNickName.setEnabled(false);
-        mEdUserName.setEnabled(false);
-        mEdBirthday.setEnabled(false);
-        mEdFirstName.setEnabled(false);
-        mEdLastName.setEnabled(false);
-        mEdAddress.setEnabled(false);
-        mEdHomeTown.setEnabled(false);
-        mEdPhone.setEnabled(false);
-        mEdEmail.setEnabled(false);
-        mFemaleRadioButton.setEnabled(false);
-        mMaleRadioButton.setEnabled(false);
+        setEnabled(false);
         Log.d(TAG, "updateUserSuccess() called");
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void updateUserFail(String message) {
+        mProgressBar.setVisibility(View.GONE);
         Log.d(TAG, "updateUserFail() called with: message = [" + message + "]");
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void updategetUser(MUserProfile mUserProfile) {
+        mProgressBar.setVisibility(View.GONE);
         mAvatar = mUserProfile.getUrlavatar();
         if (mUserProfile.getUrlavatar() != null && !mUserProfile.getUrlavatar().isEmpty()) {
             Picasso.with(this)
@@ -296,6 +290,7 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
             mMaleRadioButton.setChecked(false);
             mFemaleRadioButton.setChecked(true);
         }
+        mEdDescription.setText(mUserProfile.getDescripton());
     }
 
     private String decodeFile(String path, int DESIREDWIDTH, int DESIREDHEIGHT) {
@@ -303,16 +298,16 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
         Bitmap scaledBitmap = null;
 
         try {
-//            // Part 1: Decode image
-//            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-//
-//            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
-//                // Part 2: Scale image
-//                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-//            } else {
-//                unscaledBitmap.recycle();
-//                return path;
-//            }
+            // Part 1: Decode image
+            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+
+            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+                // Part 2: Scale image
+                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+            } else {
+                unscaledBitmap.recycle();
+                return path;
+            }
 
             // Store to tmp file
 
@@ -349,5 +344,20 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
             return path;
         }
         return strMyImagePath;
+    }
+
+    private void setEnabled(boolean isEnabled) {
+        mEdNickName.setEnabled(isEnabled);
+        mEdUserName.setEnabled(isEnabled);
+        mEdBirthday.setEnabled(isEnabled);
+        mEdFirstName.setEnabled(isEnabled);
+        mEdLastName.setEnabled(isEnabled);
+        mEdAddress.setEnabled(isEnabled);
+        mEdHomeTown.setEnabled(isEnabled);
+        mEdPhone.setEnabled(isEnabled);
+        mEdEmail.setEnabled(isEnabled);
+        mEdDescription.setEnabled(isEnabled);
+        mFemaleRadioButton.setEnabled(isEnabled);
+        mMaleRadioButton.setEnabled(isEnabled);
     }
 }
