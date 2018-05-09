@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,7 +34,6 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.login.MUserProfile;
 import vn.com.codedao.facecook.presenter.updateuser.PresenterLogicHandleUpdateUser;
 import vn.com.codedao.facecook.utils.Constant;
-import vn.com.codedao.facecook.utils.ScalingUtilities;
 import vn.com.codedao.facecook.view.CircleImageView;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -306,16 +303,16 @@ public class UpdateUserActivity extends AppCompatActivity implements IViewUpdate
         Bitmap scaledBitmap = null;
 
         try {
-            // Part 1: Decode image
-            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-
-            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
-                // Part 2: Scale image
-                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
-            } else {
-                unscaledBitmap.recycle();
-                return path;
-            }
+//            // Part 1: Decode image
+//            Bitmap unscaledBitmap = ScalingUtilities.decodeFile(path, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+//
+//            if (!(unscaledBitmap.getWidth() <= DESIREDWIDTH && unscaledBitmap.getHeight() <= DESIREDHEIGHT)) {
+//                // Part 2: Scale image
+//                scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, DESIREDWIDTH, DESIREDHEIGHT, ScalingUtilities.ScalingLogic.FIT);
+//            } else {
+//                unscaledBitmap.recycle();
+//                return path;
+//            }
 
             // Store to tmp file
 

@@ -20,4 +20,6 @@ public class Constant {
     public static final String TOKEN_DEFAULT = "no_authorization";
     public static final String NICKNAME_DEFAULT = "-1";
     public static final String REQUEST_UPDATE_IMAGE = "request_update";
+    public static final String HANDLE_GET_POST_FINISH ="HANDLE_GET_POST_FINISH";
+    public static final String HANDLE_GET_POST_FAIL ="HANDLE_GET_POST_FAIL";
 }

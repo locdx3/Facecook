@@ -6,5 +6,5 @@ package vn.com.codedao.facecook.presenter.newfeed;
 
 public interface IPresenterHandleNewFeed {
     void getListPost();
-    void getListComment();
+    void getListComment(int p);
 }

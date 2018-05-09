@@ -5,27 +5,41 @@ package vn.com.codedao.facecook.model.newfeed;
  */
 
 public class Like {
-    private int mIdUser;
-    private String mDataLike;
 
-    public Like(int mIdUser, String mDataLike) {
-        this.mIdUser = mIdUser;
-        this.mDataLike = mDataLike;
+    public String feelid;
+    public String postid;
+    public String userid;
+    public String typefeel;
+
+    public String getFeelid() {
+        return feelid;
     }
 
-    public int getIdUser() {
-        return mIdUser;
+    public void setFeelid(String feelid) {
+        this.feelid = feelid;
     }
 
-    public void setIdUser(int mIdUser) {
-        this.mIdUser = mIdUser;
+    public String getPostid() {
+        return postid;
     }
 
-    public String getDataLike() {
-        return mDataLike;
+    public void setPostid(String postid) {
+        this.postid = postid;
     }
 
-    public void setDataLike(String mDataLike) {
-        this.mDataLike = mDataLike;
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getTypefeel() {
+        return typefeel;
+    }
+
+    public void setTypefeel(String typefeel) {
+        this.typefeel = typefeel;
     }
 }

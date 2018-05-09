@@ -11,6 +11,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.model.login.MUserProfile;
+import vn.com.codedao.facecook.model.newfeed.PostResponse;
 
 /**
  * Created by Bruce Wayne on 12/04/2018.
@@ -75,6 +76,11 @@ public interface ApiInterface {
     })
     @POST("User/getUser")
     Call<MUserProfile> getUser(@Field("userid") String userid);
+
+    @FormUrlEncoded
+    @POST("Post/getPostbyitem")
+    Call<PostResponse> getPosst(@Field("numitem") int numitem,
+                                @Field("startnum") int startnum );
 
     @Headers({
             "Client-Service: locdx3",

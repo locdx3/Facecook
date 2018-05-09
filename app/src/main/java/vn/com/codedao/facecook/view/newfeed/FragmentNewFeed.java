@@ -23,7 +23,7 @@ import java.util.List;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
-import vn.com.codedao.facecook.model.newfeed.Post;
+import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 
 /**
@@ -52,12 +52,11 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mRecyclerView = view.findViewById(R.id.rc_newFeed);
         mPresenterLogicHandleHome = new PresenterLogicHandleNewFeed(this);
         mPresenterLogicHandleHome.getListPost();
-
         return view;
     }
 
     @Override
-    public void setApdater(List<Post> posts) {
+    public void setApdater(List<PostList> posts) {
         mPostAdapter = new PostAdapter(getActivity(), posts, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -72,7 +71,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         if (comments.size() == 0) {
             mTextView.setVisibility(View.VISIBLE);
         }
-        mCommentAdapter = new CommentAdapter(comments);
+        mCommentAdapter = new CommentAdapter(comments,getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerViewComment.setLayoutManager(mLayoutManager);
         mRecyclerViewComment.setItemAnimator(new DefaultItemAnimator());
@@ -91,11 +90,11 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void onClickItemComment(int position) {
-        onShowPopup(getView());
+        onShowPopup(getView(),position);
     }
 
 
-    public void onShowPopup(View v) {
+    public void onShowPopup(View v,int p) {
 
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -104,7 +103,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         // find the ListView in the popup layout
         // ListView listView = (ListView)inflatedView.findViewById(R.id.commentsListView);
         mRecyclerViewComment = inflatedView.findViewById(R.id.rcComment);
-        mPresenterLogicHandleHome.getListComment();
+        mPresenterLogicHandleHome.getListComment(p);
         TextView txtDone = inflatedView.findViewById(R.id.txtDone);
         final EditText editText = inflatedView.findViewById(R.id.edComment);
         mTextView = inflatedView.findViewById(R.id.txtNocomment);

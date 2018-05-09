@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.model.login.MUserProfile;
+import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
 
@@ -53,6 +54,28 @@ public class ApiConnect {
             @Override
             public void onFailure(Call<MReponse> call, Throwable t) {
                 Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+            }
+        });
+    }
+
+    public void getPost(int numItem, int startNum) {
+        Call<PostResponse> call = mApi.getPosst(numItem, startNum);
+        call.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                PostResponse postResponse = response.body();
+                MessageEvent messageEvent = new MessageEvent();
+                messageEvent.setmEvent(Constant.HANDLE_GET_POST_FINISH);
+                messageEvent.setmMRepone(postResponse);
+                EventBus.getDefault().post(messageEvent);
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+                MessageEvent messageEvent = new MessageEvent();
+                messageEvent.setmEvent(Constant.HANDLE_GET_POST_FAIL);
+                EventBus.getDefault().post(messageEvent);
             }
         });
     }

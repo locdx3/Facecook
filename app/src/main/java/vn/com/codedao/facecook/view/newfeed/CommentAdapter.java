@@ -1,11 +1,14 @@
 package vn.com.codedao.facecook.view.newfeed;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,9 +22,11 @@ import vn.com.codedao.facecook.view.CircleImageView;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     List<Comment> mCommentList;
+    private Context mContext;
 
-    public CommentAdapter(List<Comment> mCommentList) {
+    public CommentAdapter(List<Comment> mCommentList, Context context) {
         this.mCommentList = mCommentList;
+        this.mContext = context;
     }
 
     @Override
@@ -34,7 +39,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = mCommentList.get(position);
-        holder.txtConten.setText(Html.fromHtml("<strong><font color='#333399'>User"+comment.getIdUser()+" </font></strong>"+ comment.getComment()));
+        holder.txtConten.setText(Html.fromHtml("<strong><font color='#333399'>" + comment.getName() + " </font></strong>" + comment.getComment()));
+        Picasso.with(mContext)
+                .load(comment.getUrlavatar())
+                .into(holder.imgAvatar);
     }
 
     @Override

@@ -5,32 +5,96 @@ package vn.com.codedao.facecook.model.newfeed;
  */
 
 public class Comment {
-    private int mIdUser;
-    private String mComment;
+    private int userid;
+    private String content;
     private String mDateCreate;
     private String mDataUpdate;
+    private String commentid;
+    private String postid;
+    private String name;
+    private String urlavatar;
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getmDateCreate() {
+        return mDateCreate;
+    }
+
+    public void setmDateCreate(String mDateCreate) {
+        this.mDateCreate = mDateCreate;
+    }
+
+    public String getmDataUpdate() {
+        return mDataUpdate;
+    }
+
+    public String getCommentid() {
+        return commentid;
+    }
+
+    public void setCommentid(String commentid) {
+        this.commentid = commentid;
+    }
+
+    public String getPostid() {
+        return postid;
+    }
+
+    public void setPostid(String postid) {
+        this.postid = postid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrlavatar() {
+        return urlavatar;
+    }
+
+    public void setUrlavatar(String urlavatar) {
+        this.urlavatar = urlavatar;
+    }
 
     public Comment(int mIdUser, String mComment, String mDateCreate, String mDataUpdate) {
-        this.mIdUser = mIdUser;
-        this.mComment = mComment;
+        this.userid = mIdUser;
+        this.content = mComment;
         this.mDateCreate = mDateCreate;
         this.mDataUpdate = mDataUpdate;
     }
 
     public int getIdUser() {
-        return mIdUser;
+        return userid;
     }
 
     public void setIdUser(int mIdUser) {
-        this.mIdUser = mIdUser;
+        this.userid = mIdUser;
     }
 
     public String getComment() {
-        return mComment;
+        return content;
     }
 
     public void setComment(String mComment) {
-        this.mComment = mComment;
+        this.content = mComment;
     }
 
     public String getDateCreate() {
