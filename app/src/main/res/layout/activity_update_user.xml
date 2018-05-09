@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Edit User"
+            android:text="@string/title_hint_Update"
             android:textColor="#ffffff" />
 
         <TextView
@@ -36,9 +36,8 @@
             android:layout_gravity="right"
             android:padding="@dimen/_8sdp"
             android:text="Edit"
-            android:textSize="18sp"
             android:textColor="@drawable/press_update_save"
-            />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvSaveUpdate"
@@ -114,6 +113,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
                     android:orientation="vertical">
 
 
@@ -161,6 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/linearLayoutUpdate"
+                android:layout_marginRight="6dp"
                 android:orientation="vertical">
 
 
@@ -206,26 +207,48 @@
                     android:id="@+id/edPhoneUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
                     android:drawablePadding="16dp"
                     android:enabled="false"
-                    android:focusable="false"
-                    android:gravity="center_vertical"
                     android:hint="@string/phone_hint_Update"
-                    android:padding="16dp"
+                    android:inputType="none"
+                    android:paddingBottom="16dp"
+                    android:singleLine="true"
                     android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/edEmailUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
                     android:drawablePadding="16dp"
                     android:enabled="false"
-                    android:focusable="false"
-                    android:gravity="center_vertical"
                     android:hint="@string/email_hint_Update"
-                    android:padding="16dp"
+                    android:inputType="none"
+                    android:paddingBottom="16dp"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/edDescriptionUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    android:hint="@string/description_hint_Update"
+                    android:inputType="none"
+                    android:paddingBottom="16dp"
+                    android:singleLine="true"
                     android:textSize="20sp" />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pbUpdateUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>
