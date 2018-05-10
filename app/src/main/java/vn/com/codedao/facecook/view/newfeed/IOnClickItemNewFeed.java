@@ -6,4 +6,5 @@ package vn.com.codedao.facecook.view.newfeed;
 
 public interface IOnClickItemNewFeed {
     void onClickItemComment(int position);
+    void onClickHeader();
 }

@@ -33,9 +33,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.mContext = mContext;
         this.postList = postList;
         this.mIOnClickItemNewFeed = iOnClickItemNewFeed;
-        PostList p = new PostList();
-        p.setHeader(true);
-        postList.add(0, p);
     }
 
 
@@ -68,6 +65,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (post != null) {
             switch (holder.getItemViewType()) {
                 case 0:
+                    ((HeaderViewHolder) holder).root_liner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mIOnClickItemNewFeed.onClickHeader();
+                        }
+                    });
                     break;
                 case 1:
                     ((MyViewHolder) holder).txtName.setText(post.getName());
@@ -191,9 +194,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-
+        public LinearLayout root_liner;
         public HeaderViewHolder(View itemView) {
             super(itemView);
+            root_liner = itemView.findViewById(R.id.root_liner);
 
         }
     }

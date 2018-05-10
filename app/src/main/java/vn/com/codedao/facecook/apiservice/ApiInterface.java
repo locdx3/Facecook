@@ -104,4 +104,18 @@ public interface ApiInterface {
             @Part("birthday") RequestBody birthday,
             @Part("descripton") RequestBody descripton,
             @Part("dateupdate") RequestBody dateupdate);
+
+    @Multipart
+    @POST("Post/addPost")
+    Call<MReponse> addPost(
+            @Part MultipartBody.Part filePart,
+            @Part("userid") RequestBody userid,
+            @Part("groupid") RequestBody groupid,
+            @Part("title") RequestBody title,
+            @Part("content") RequestBody content,
+            @Part("priority") RequestBody priority,
+            @Part("name") RequestBody name,
+            @Part("description") RequestBody description,
+            @Part("urlavatar") RequestBody urlavatar);
+
 }

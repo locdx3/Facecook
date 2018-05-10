@@ -3,6 +3,7 @@ package vn.com.codedao.facecook.view.newfeed;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,6 +26,7 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
+import vn.com.codedao.facecook.view.post.PostActiviy;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +45,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     private RecyclerView mRecyclerViewComment;
     PopupWindow mPopWindow;
     TextView mTextView;
+    private int mIdUser = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,6 +94,13 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     @Override
     public void onClickItemComment(int position) {
         onShowPopup(getView(),position);
+    }
+
+    @Override
+    public void onClickHeader() {
+        Intent intent = new Intent(getActivity(), PostActiviy.class);
+        intent.putExtra("ID_USER", mIdUser);
+        startActivity(intent);
     }
 
 

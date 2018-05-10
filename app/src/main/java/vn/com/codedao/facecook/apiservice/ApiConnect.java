@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.model.login.MUserProfile;
+import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
@@ -31,7 +32,7 @@ public class ApiConnect {
     private final String TAG = this.getClass().getSimpleName();
     ApiInterface mApi =
             ApiClient.getClient().create(ApiInterface.class);
-
+    MessageEvent mMessageEvent = new MessageEvent();
     public void login(final String username, final String password) {
         Log.d(TAG, "login() called with: username = [" + username + "], password = [" + password + "]");
         Call<MReponse> call = mApi.login(username, password);
@@ -42,10 +43,9 @@ public class ApiConnect {
                 if (response.isSuccessful()) {
                     MReponse reponse = response.body();
                     Log.d(TAG, "onResponse 01: " + reponse.getId());
-                    MessageEvent messageEvent = new MessageEvent();
-                    messageEvent.setmEvent(Constant.DATALOGIN);
-                    messageEvent.setmMRepone(reponse);
-                    EventBus.getDefault().post(messageEvent);
+                    mMessageEvent.setmEvent(Constant.DATALOGIN);
+                    mMessageEvent.setmMRepone(reponse);
+                    EventBus.getDefault().post(mMessageEvent);
                 } else {
                     login(username, password);
                 }
@@ -65,17 +65,18 @@ public class ApiConnect {
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
                 PostResponse postResponse = response.body();
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.HANDLE_GET_POST_FINISH);
-                messageEvent.setmMRepone(postResponse);
-                EventBus.getDefault().post(messageEvent);
+                PostList postList = new PostList();
+                postList.setHeader(true);
+                postResponse.getPostLists().add(0, postList);
+                mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FINISH);
+                mMessageEvent.setmMRepone(postResponse);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
             public void onFailure(Call<PostResponse> call, Throwable t) {
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.HANDLE_GET_POST_FAIL);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FAIL);
+                EventBus.getDefault().post(mMessageEvent);
             }
         });
     }
@@ -92,10 +93,9 @@ public class ApiConnect {
             public void onResponse(Call<MReponse> call, Response<MReponse> response) {
                 MReponse reponse = response.body();
                 Log.d(TAG, "onResponse 01: " + reponse.getId());
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.DATALOGINFB);
-                messageEvent.setmMRepone(reponse);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.DATALOGINFB);
+                mMessageEvent.setmMRepone(reponse);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
@@ -122,10 +122,9 @@ public class ApiConnect {
             public void onResponse(Call<MReponse> call, Response<MReponse> response) {
                 MReponse reponse = response.body();
                 Log.d(TAG, "onResponse status : " + reponse.getStatus());
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.CHECKDATAREGISTER);
-                messageEvent.setmMRepone(reponse);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.CHECKDATAREGISTER);
+                mMessageEvent.setmMRepone(reponse);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
@@ -142,10 +141,9 @@ public class ApiConnect {
             public void onResponse(Call<MReponse> call, Response<MReponse> response) {
                 MReponse reponse = response.body();
                 Log.d(TAG, "onResponse iduser : " + reponse.getId());
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.DATAREGISTER);
-                messageEvent.setmMRepone(reponse);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.DATAREGISTER);
+                mMessageEvent.setmMRepone(reponse);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
@@ -165,10 +163,9 @@ public class ApiConnect {
                 MUserProfile mUserProfile = response.body();
                 Log.d(TAG, "onResponse() called with: name = [" + mUserProfile.getName() + "]");
                 Log.d(TAG, "onResponse() called with: avatar = [" + mUserProfile.getUrlavatar() + "]");
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.DATAGETUSER);
-                messageEvent.setmMRepone(mUserProfile);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.DATAGETUSER);
+                mMessageEvent.setmMRepone(mUserProfile);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
@@ -208,15 +205,51 @@ public class ApiConnect {
             public void onResponse(Call<MReponse> call, Response<MReponse> response) {
                 Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
                 MReponse mReponse = response.body();
-                MessageEvent messageEvent = new MessageEvent();
-                messageEvent.setmEvent(Constant.DATAUPDATEUSER);
-                messageEvent.setmMRepone(mReponse);
-                EventBus.getDefault().post(messageEvent);
+                mMessageEvent.setmEvent(Constant.DATAUPDATEUSER);
+                mMessageEvent.setmMRepone(mReponse);
+                EventBus.getDefault().post(mMessageEvent);
             }
 
             @Override
             public void onFailure(Call<MReponse> call, Throwable t) {
                 Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void AddPost(int idUser,String conten ,String avt, File file, RequestBody requestBody) {
+        RequestBody userid = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idUser));
+        RequestBody groupid = RequestBody.create(MediaType.parse("text/plain"), "1");
+        RequestBody title = RequestBody.create(MediaType.parse("text/plain"), "");
+        RequestBody content = RequestBody.create(MediaType.parse("text/plain"), conten);
+        RequestBody priority = RequestBody.create(MediaType.parse("text/plain"), "1");
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "");
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), "");
+        RequestBody urlavatar = RequestBody.create(MediaType.parse("text/plain"), avt);
+        // Trong retrofit 2 để upload file ta sử dụng Multipart, khai báo 1 MultipartBody.Part
+        // uploaded_file là key mà mình đã định nghĩa trong khi khởi tạo server
+        MultipartBody.Part filePart = null;
+        if (file != null) {
+            filePart = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
+        }
+        Log.d(TAG, "uploadFiles() called with: filePart = [" + filePart + "]");
+        Call<MReponse> call = mApi.addPost(filePart, userid, groupid, title, content, priority, name, description, urlavatar);
+        call.enqueue(new Callback<MReponse>() {
+            @Override
+            public void onResponse(Call<MReponse> call, Response<MReponse> response) {
+                Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                MReponse mReponse = response.body();
+                mMessageEvent.setmEvent(Constant.ADD_POST_FINISH);
+                mMessageEvent.setmMRepone(mReponse);
+                EventBus.getDefault().post(mMessageEvent);
+            }
+
+            @Override
+            public void onFailure(Call<MReponse> call, Throwable t) {
+                Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+                mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FAIL);
+                EventBus.getDefault().post(mMessageEvent);
             }
         });
     }
