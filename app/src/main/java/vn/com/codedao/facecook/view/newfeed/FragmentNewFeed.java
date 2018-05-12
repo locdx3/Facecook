@@ -30,6 +30,7 @@ import java.util.List;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
+import vn.com.codedao.facecook.model.newfeed.Like;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.utils.Constant;
@@ -77,7 +78,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void setApdater(List<PostList> posts) {
-        mPostAdapter = new PostAdapter(getActivity(), posts, this);
+        mPostAdapter = new PostAdapter(getActivity(), posts, this, mIdUser);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(1));
@@ -120,6 +121,12 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         intent.putExtra("NAME_USER", mName);
         startActivityForResult(intent, 1994);
     }
+
+    @Override
+    public void ClickLike(Like like) {
+        mPresenterLogicHandleHome.addLike(like);
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

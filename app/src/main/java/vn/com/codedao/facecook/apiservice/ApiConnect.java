@@ -20,6 +20,7 @@ import retrofit2.Response;
 import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.model.login.MUserProfile;
 import vn.com.codedao.facecook.model.newfeed.Comment;
+import vn.com.codedao.facecook.model.newfeed.Like;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
@@ -278,6 +279,31 @@ public class ApiConnect {
             public void onFailure(Call<MReponse> call, Throwable t) {
                 Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
                 mMessageEvent.setmEvent(Constant.HANDLE_ADD_COMMENT_FAIL);
+                EventBus.getDefault().post(mMessageEvent);
+            }
+        });
+    }
+
+    public void AddFell(Like like) {
+        RequestBody postid = RequestBody.create(MediaType.parse("text/plain"), like.getPostid());
+        RequestBody userid = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(like.getUserid()));
+        RequestBody typefeel = RequestBody.create(MediaType.parse("text/plain"), like.getTypefeel());
+
+        Call<MReponse> call = mApi.addFell(postid,userid,typefeel);
+        call.enqueue(new Callback<MReponse>() {
+            @Override
+            public void onResponse(Call<MReponse> call, Response<MReponse> response) {
+                Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                MReponse mReponse = response.body();
+                mMessageEvent.setmEvent(Constant.HANDLE_LIKE_FINISH);
+                mMessageEvent.setmMRepone(mReponse);
+                EventBus.getDefault().post(mMessageEvent);
+            }
+
+            @Override
+            public void onFailure(Call<MReponse> call, Throwable t) {
+                Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+                mMessageEvent.setmEvent(Constant.HANDLE_LIKE_FAIL);
                 EventBus.getDefault().post(mMessageEvent);
             }
         });

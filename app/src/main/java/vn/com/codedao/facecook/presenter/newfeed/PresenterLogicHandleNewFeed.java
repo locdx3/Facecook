@@ -11,6 +11,7 @@ import java.util.List;
 
 import vn.com.codedao.facecook.apiservice.ApiConnect;
 import vn.com.codedao.facecook.model.newfeed.Comment;
+import vn.com.codedao.facecook.model.newfeed.Like;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
@@ -70,6 +71,12 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
     public void addComment(Comment comment) {
         ApiConnect apiConnect = new ApiConnect();
         apiConnect.AddCommet(comment);
+    }
+
+    @Override
+    public void addLike(Like like) {
+        ApiConnect apiConnect = new ApiConnect();
+        apiConnect.AddFell(like);
     }
 
 }

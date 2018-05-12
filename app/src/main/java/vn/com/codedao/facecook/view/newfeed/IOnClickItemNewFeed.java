@@ -1,5 +1,6 @@
 package vn.com.codedao.facecook.view.newfeed;
 
+import vn.com.codedao.facecook.model.newfeed.Like;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 
 /**
@@ -9,4 +10,5 @@ import vn.com.codedao.facecook.model.newfeed.PostList;
 public interface IOnClickItemNewFeed {
     void onClickItemComment(PostList comments);
     void onClickHeader();
+    void ClickLike(Like like);
 }

@@ -125,4 +125,13 @@ public interface ApiInterface {
             @Part("userid") RequestBody userid,
             @Part("content") RequestBody content);
 
+    @Multipart
+    @POST("Post/addFell")
+    Call<MReponse> addFell(
+            @Part("postid") RequestBody postid,
+            @Part("userid") RequestBody userid,
+            @Part("typefeel") RequestBody typefeel);
+
+
+
 }

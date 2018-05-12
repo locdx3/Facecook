@@ -58,5 +58,6 @@
     <string name="create_post">Create Post</string>
     <string name="cancel">Cancel</string>
     <string name="add_to_your_post">Add to your post</string>
+    <string name="like">Like</string>
     <!--end update user-->
 </resources>
