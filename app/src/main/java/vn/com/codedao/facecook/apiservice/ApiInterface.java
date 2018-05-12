@@ -118,4 +118,11 @@ public interface ApiInterface {
             @Part("description") RequestBody description,
             @Part("urlavatar") RequestBody urlavatar);
 
+    @Multipart
+    @POST("Post/addComment")
+    Call<MReponse> addComment(
+            @Part("postid") RequestBody postid,
+            @Part("userid") RequestBody userid,
+            @Part("content") RequestBody content);
+
 }

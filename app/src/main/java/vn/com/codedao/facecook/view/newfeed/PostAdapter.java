@@ -61,7 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        PostList post = postList.get(position);
+        final PostList post = postList.get(position);
         if (post != null) {
             switch (holder.getItemViewType()) {
                 case 0:
@@ -85,7 +85,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((MyViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mIOnClickItemNewFeed.onClickItemComment(position);
+                            mIOnClickItemNewFeed.onClickItemComment(post);
                         }
                     });
 
@@ -111,7 +111,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     ((ImgViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            mIOnClickItemNewFeed.onClickItemComment(position);
+                            mIOnClickItemNewFeed.onClickItemComment(post);
                         }
                     });
                     break;

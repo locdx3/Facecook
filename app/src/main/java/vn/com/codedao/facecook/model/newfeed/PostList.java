@@ -2,9 +2,10 @@ package vn.com.codedao.facecook.model.newfeed;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PostList {
+public class PostList implements Serializable {
     @SerializedName("userid")
     private String userid;
     @SerializedName("postid")

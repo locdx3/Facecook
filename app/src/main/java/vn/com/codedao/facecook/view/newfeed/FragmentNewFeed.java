@@ -4,8 +4,11 @@ package vn.com.codedao.facecook.view.newfeed;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,9 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -26,6 +32,9 @@ import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
+import vn.com.codedao.facecook.utils.Constant;
+import vn.com.codedao.facecook.utils.MessageEvent;
+import vn.com.codedao.facecook.view.Comment.CommentActivity;
 import vn.com.codedao.facecook.view.post.PostActiviy;
 
 /**
@@ -46,12 +55,20 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     PopupWindow mPopWindow;
     TextView mTextView;
     private int mIdUser = 1;
+    private String mName = "";
+    private String mUrlAvt = "";
+    private ImageView mImgSend;
+    MessageEvent mEvent;
+    private PostList mPostList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_feed, container, false);
         //Begin Code NamHV4
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(Constant.MyPREFERENCES, Context.MODE_PRIVATE);
+        mIdUser = Integer.parseInt(sharedPref.getString(Constant.ID, "0"));
+        mName = sharedPref.getString(Constant.NICKNAME, "User");
         mRecyclerView = view.findViewById(R.id.rc_newFeed);
         mPresenterLogicHandleHome = new PresenterLogicHandleNewFeed(this);
         mPresenterLogicHandleHome.getListPost();
@@ -71,9 +88,6 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void setAdapterComment(List<Comment> comments) {
-        if (comments.size() == 0) {
-            mTextView.setVisibility(View.VISIBLE);
-        }
         mCommentAdapter = new CommentAdapter(comments,getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerViewComment.setLayoutManager(mLayoutManager);
@@ -92,19 +106,35 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     }
 
     @Override
-    public void onClickItemComment(int position) {
-        onShowPopup(getView(),position);
+    public void onClickItemComment(PostList comments) {
+        Intent intent = new Intent(getActivity(), CommentActivity.class);
+        intent.putExtra("LIST_COMMENT",comments);
+        startActivityForResult(intent,1994);
+
     }
 
     @Override
     public void onClickHeader() {
         Intent intent = new Intent(getActivity(), PostActiviy.class);
         intent.putExtra("ID_USER", mIdUser);
-        startActivity(intent);
+        intent.putExtra("NAME_USER", mName);
+        startActivityForResult(intent, 1994);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1994) {
+            if (resultCode == 1) {
+                Toast.makeText(getActivity(), data.getStringExtra("conten"), Toast.LENGTH_SHORT).show();
+            }else {
+                mPresenterLogicHandleHome.getListPost();
+            }
 
-    public void onShowPopup(View v,int p) {
+        }
+    }
+
+    public void onShowPopup(View v, int p, final int idPost) {
 
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -117,6 +147,18 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         TextView txtDone = inflatedView.findViewById(R.id.txtDone);
         final EditText editText = inflatedView.findViewById(R.id.edComment);
         mTextView = inflatedView.findViewById(R.id.txtNocomment);
+        mImgSend = inflatedView.findViewById(R.id.imgSend);
+        mImgSend.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                Comment comment = new Comment();
+                comment.setContent(editText.getText().toString());
+                comment.setIdUser(mIdUser);
+                comment.setPostid(String.valueOf(idPost));
+                mPresenterLogicHandleHome.addComment(comment);
+            }
+        });
 
 
         txtDone.setOnClickListener(new View.OnClickListener() {
@@ -167,5 +209,12 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        mEvent = new MessageEvent();
+        mEvent.setmEvent(Constant.SEND_LIST_COMMENT);
+        mEvent.setmMRepone(mPostList);
+        EventBus.getDefault().post(mEvent);
+    }
 }

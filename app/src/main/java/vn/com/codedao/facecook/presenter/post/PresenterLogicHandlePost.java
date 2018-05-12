@@ -10,6 +10,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,6 +31,7 @@ import static vn.com.codedao.facecook.view.updateuser.UpdateUserActivity.PICK_IM
 import static vn.com.codedao.facecook.view.updateuser.UpdateUserActivity.READ_EXTERNAL_REQUEST;
 
 public class PresenterLogicHandlePost implements IPresenterLogicHandlePost {
+    private static final String TAG = "PresenterLogicHandlePost" ;
     private IPostView mIPostView;
     private Activity activity;
     private Context mContext;
@@ -58,11 +60,14 @@ public class PresenterLogicHandlePost implements IPresenterLogicHandlePost {
 
                 break;
             case Constant.ADD_POST_FINISH:
-                activity.finish();
+                Log.d(TAG, "onMessageEvent() called with: event = [" + event + "]");
+                event.setmEvent(Constant.HANDLE_ADD_POST_FINISH);
+                EventBus.getDefault().post(event);
+                //mIPostView.finishActivity();
                 break;
             case Constant.ADD_POST_FAIL:
                 Toast.makeText(activity, "Post fail", Toast.LENGTH_SHORT).show();
-                break;
+            break;
             default:
                 break;
         }
@@ -85,11 +90,17 @@ public class PresenterLogicHandlePost implements IPresenterLogicHandlePost {
                 mFile);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     public void postOnService(int idUser, String conten) {
         ApiConnect apiConnect = new ApiConnect();
-        apiConnect.AddPost(idUser, conten, "request_post_image", mFile, mRequestBody);
+        String request;
+        if (mRequestBody == null) {
+            request = "#";
+        } else {
+            request = "request_post_image";
+        }
+        apiConnect.AddPost(idUser, conten, request, mFile, mRequestBody);
     }
 
 

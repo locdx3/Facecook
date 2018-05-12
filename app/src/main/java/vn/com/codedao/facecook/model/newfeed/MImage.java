@@ -1,6 +1,8 @@
 package vn.com.codedao.facecook.model.newfeed;
 
-public class MImage {
+import java.io.Serializable;
+
+public class MImage implements Serializable {
     private String imageid;
     private String postid;
     private String name;

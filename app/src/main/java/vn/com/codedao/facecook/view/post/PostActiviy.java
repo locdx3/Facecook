@@ -6,11 +6,13 @@ import android.inputmethodservice.ExtractEditText;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,11 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
     private TextView mTxtName;
     private CircleImageView mImgAvatar;
     private int mIdUser;
+    private String mName;
+    private ImageView mImgPhoto;
+    private ProgressBar mProgressBar;
+    private int progressStatus;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +49,15 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().hide();
         initView();
         mIdUser = getIntent().getIntExtra("ID_USER", 0);
+        mName = getIntent().getStringExtra("NAME_USER");
+        mTxtName.setText(mName);
         mPresenterLogicHandlePost = new PresenterLogicHandlePost(this, this, this);
 
     }
 
     private void initView() {
+        mProgressBar = findViewById(R.id.pb);
+        mImgPhoto = findViewById(R.id.imgPhoto);
         mExtractEditText = findViewById(R.id.edTextConten);
         mTxtName = findViewById(R.id.txtName);
         mImgAvatar = findViewById(R.id.imgAvatar);
@@ -56,6 +67,7 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
         mBtnPost = findViewById(R.id.btnPost);
         mBtnPost.setOnClickListener(this);
         mImgAddPhoto.setOnClickListener(this);
+        mExtractEditText.requestFocus();
     }
 
 
@@ -67,9 +79,11 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
                 mPresenterLogicHandlePost.AddPhoto();
                 break;
             case R.id.btnPost:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    mPresenterLogicHandlePost.postOnService(mIdUser, mExtractEditText.getText().toString());
-                }
+                mPresenterLogicHandlePost.postOnService(mIdUser, mExtractEditText.getText().toString());
+                Intent intent = new Intent();
+                intent.putExtra("conten", mExtractEditText.getText().toString());
+                setResult(1, intent);
+                finish();
                 break;
             case R.id.btnCancel:
                 mPresenterLogicHandlePost.cancel();
@@ -101,10 +115,25 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
             // Khi đã chọn xong ảnh thì chúng ta tiến hành upload thôi
             mAvatar = Constant.REQUEST_UPDATE_IMAGE;
             Uri uri = data.getData();
-            //mImageViewAvatar.setImageURI(uri);
+            mImgPhoto.setImageURI(uri);
+            mImgPhoto.setVisibility(View.VISIBLE);
             mPresenterLogicHandlePost.uploadFiles(uri);
         }
     }
 
 
+    @Override
+    public void finishActivity() {
+        mProgressBar.setProgress(100);
+        Log.d(TAG, "finishActivity() called finish()");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 1000);
+
+
+    }
 }

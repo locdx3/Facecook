@@ -1,5 +1,8 @@
 package vn.com.codedao.facecook.presenter.newfeed;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -21,6 +24,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
 
     private INewFeed mINewFeed;
     PostResponse mPost;
+    int mPotision = 0;
 
     public PresenterLogicHandleNewFeed(INewFeed mINewFeed) {
         EventBus.getDefault().register(this);
@@ -30,7 +34,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
     @Override
     public void getListPost() {
         ApiConnect apiConnect = new ApiConnect();
-        apiConnect.getPost(5,0);
+        apiConnect.getPost(10,0);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
@@ -46,6 +50,9 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
                 mPost = (PostResponse) event.getmMRepone();
                 mINewFeed.setApdater(mPost.getPostLists());
                 break;
+            case Constant.HANDLE_ADD_POST_FINISH:
+                getListPost();
+                break;
             default:
                 break;
         }
@@ -55,6 +62,14 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
     public void getListComment(int p) {
         List<Comment> comment = mPost.getPostLists().get(p).getComment();
         mINewFeed.setAdapterComment(comment);
+        mPotision = p;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void addComment(Comment comment) {
+        ApiConnect apiConnect = new ApiConnect();
+        apiConnect.AddCommet(comment);
     }
 
 }

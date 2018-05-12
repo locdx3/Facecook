@@ -3,6 +3,7 @@ package vn.com.codedao.facecook.view.newfeed;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,14 @@ import vn.com.codedao.facecook.view.CircleImageView;
  */
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-    List<Comment> mCommentList;
+    private List<Comment> mCommentList;
     private Context mContext;
 
     public CommentAdapter(List<Comment> mCommentList, Context context) {
         this.mCommentList = mCommentList;
         this.mContext = context;
+        Log.d("NamHV4", "CommentAdapter() called with: mCommentList = [" + mCommentList.size() + "], context = [" + context + "]");
+
     }
 
     @Override
@@ -39,6 +42,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = mCommentList.get(position);
+        Log.d("NamHV4", "onBindViewHolder() called with: comment = " + comment.getName());
         holder.txtConten.setText(Html.fromHtml("<strong><font color='#333399'>" + comment.getName() + " </font></strong>" + comment.getComment()));
         Picasso.with(mContext)
                 .load(comment.getUrlavatar())
@@ -47,6 +51,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public int getItemCount() {
+        Log.d("NamHV4", "getItemCount() called= " + mCommentList.size());
         return mCommentList.size();
     }
 
@@ -59,5 +64,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             imgAvatar = itemView.findViewById(R.id.imgAvatarComment);
             txtConten = itemView.findViewById(R.id.txtConten);
         }
+    }
+    public void addComentTolocal(Comment comment){
+        mCommentList.add(comment);
+        notifyDataSetChanged();
     }
 }

@@ -1,10 +1,12 @@
 package vn.com.codedao.facecook.model.newfeed;
 
+import java.io.Serializable;
+
 /**
  * Created by utnam on 4/12/2018.
  */
 
-public class Like {
+public class Like implements Serializable {
 
     public String feelid;
     public String postid;

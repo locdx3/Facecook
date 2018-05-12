@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.com.codedao.facecook.model.login.MReponse;
 import vn.com.codedao.facecook.model.login.MUserProfile;
+import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
@@ -63,14 +64,16 @@ public class ApiConnect {
         call.enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
-                Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
-                PostResponse postResponse = response.body();
-                PostList postList = new PostList();
-                postList.setHeader(true);
-                postResponse.getPostLists().add(0, postList);
-                mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FINISH);
-                mMessageEvent.setmMRepone(postResponse);
-                EventBus.getDefault().post(mMessageEvent);
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                    PostResponse postResponse = response.body();
+                    PostList postList = new PostList();
+                    postList.setHeader(true);
+                    postResponse.getPostLists().add(0, postList);
+                    mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FINISH);
+                    mMessageEvent.setmMRepone(postResponse);
+                    EventBus.getDefault().post(mMessageEvent);
+                }
             }
 
             @Override
@@ -217,7 +220,7 @@ public class ApiConnect {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void AddPost(int idUser,String conten ,String avt, File file, RequestBody requestBody) {
         RequestBody userid = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idUser));
         RequestBody groupid = RequestBody.create(MediaType.parse("text/plain"), "1");
@@ -249,6 +252,32 @@ public class ApiConnect {
             public void onFailure(Call<MReponse> call, Throwable t) {
                 Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
                 mMessageEvent.setmEvent(Constant.HANDLE_GET_POST_FAIL);
+                EventBus.getDefault().post(mMessageEvent);
+            }
+        });
+    }
+
+
+    public void AddCommet(Comment comment) {
+        RequestBody postid = RequestBody.create(MediaType.parse("text/plain"), comment.getPostid());
+        RequestBody userid = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(comment.getUserid()));
+        RequestBody content = RequestBody.create(MediaType.parse("text/plain"), comment.getContent());
+
+        Call<MReponse> call = mApi.addComment(postid,userid,content);
+        call.enqueue(new Callback<MReponse>() {
+            @Override
+            public void onResponse(Call<MReponse> call, Response<MReponse> response) {
+                Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                MReponse mReponse = response.body();
+                mMessageEvent.setmEvent(Constant.HANDLE_ADD_COMMENT_FINISH);
+                mMessageEvent.setmMRepone(mReponse);
+                EventBus.getDefault().post(mMessageEvent);
+            }
+
+            @Override
+            public void onFailure(Call<MReponse> call, Throwable t) {
+                Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+                mMessageEvent.setmEvent(Constant.HANDLE_ADD_COMMENT_FAIL);
                 EventBus.getDefault().post(mMessageEvent);
             }
         });

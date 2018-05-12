@@ -1,10 +1,12 @@
 package vn.com.codedao.facecook.model.newfeed;
 
+import java.io.Serializable;
+
 /**
  * Created by utnam on 4/12/2018.
  */
 
-public class Comment {
+public class Comment implements Serializable {
     private int userid;
     private String content;
     private String mDateCreate;
@@ -79,6 +81,9 @@ public class Comment {
         this.content = mComment;
         this.mDateCreate = mDateCreate;
         this.mDataUpdate = mDataUpdate;
+    }
+
+    public Comment() {
     }
 
     public int getIdUser() {

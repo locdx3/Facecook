@@ -47,6 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imgAvatar"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:text="@string/contenTest" />
 
             <RelativeLayout

@@ -23,5 +23,9 @@ public class Constant {
     public static final String HANDLE_GET_POST_FINISH ="HANDLE_GET_POST_FINISH";
     public static final String HANDLE_GET_POST_FAIL ="HANDLE_GET_POST_FAIL";
     public static final String ADD_POST_FINISH ="ADD_POST_FINISH";
+    public static final String HANDLE_ADD_POST_FINISH ="HANDLE_ADD_POST_FINISH";
     public static final String ADD_POST_FAIL ="ADD_POST_FAIL";
+    public static final String HANDLE_ADD_COMMENT_FINISH ="HANDLE_ADD_COMMENT_FINISH";
+    public static final String HANDLE_ADD_COMMENT_FAIL ="HANDLE_ADD_COMMENT_FAIL";
+    public static final String SEND_LIST_COMMENT ="SEND_LIST_COMMENT";
 }
