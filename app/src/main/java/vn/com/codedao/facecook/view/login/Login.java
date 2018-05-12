@@ -415,8 +415,8 @@ public class Login extends AppCompatActivity implements ILoginView, View.OnClick
     private void handleGgLogin() {
 //        Intent intent = new Intent(Login.this, UpdateUserActivity.class);
 //        startActivity(intent);
-        Intent intent = new Intent(Login.this, Home.class);
-        startActivity(intent);
+//        Intent intent = new Intent(Login.this, Home.class);
+//        startActivity(intent);
         this.overridePendingTransition(R.anim.right_in, R.anim.left_out);
     }
 
