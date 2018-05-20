@@ -71,7 +71,6 @@ public class FragmentMenu extends Fragment implements IFragmentMenu, IOnClickIte
             case 0:
                 Intent trantisionUpdate = new Intent(getActivity(), UpdateUserActivity.class);
                 startActivity(trantisionUpdate);
-                Toast.makeText(getContext(), "Trang cá nhân", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
                 Toast.makeText(getContext(), "bạn bè", Toast.LENGTH_SHORT).show();
@@ -92,7 +91,7 @@ public class FragmentMenu extends Fragment implements IFragmentMenu, IOnClickIte
                 editor.commit();
                 Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
-                Toast.makeText(getContext(), "LogOut", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "LogOut", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

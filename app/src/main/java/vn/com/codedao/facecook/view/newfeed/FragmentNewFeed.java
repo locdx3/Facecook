@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     private ImageView mImgSend;
     MessageEvent mEvent;
     private PostList mPostList;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +73,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mIdUser = Integer.parseInt(sharedPref.getString(Constant.ID, "0"));
         mName = sharedPref.getString(Constant.NICKNAME, "User");
         mRecyclerView = view.findViewById(R.id.rc_newFeed);
+        mProgressBar =view.findViewById(R.id.pbHeaderProgress);
         mPresenterLogicHandleHome = new PresenterLogicHandleNewFeed(this);
         mPresenterLogicHandleHome.getListPost();
         return view;
@@ -78,6 +81,7 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
 
     @Override
     public void setApdater(List<PostList> posts) {
+        mProgressBar.setVisibility(View.GONE);
         mPostAdapter = new PostAdapter(getActivity(), posts, this, mIdUser);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
