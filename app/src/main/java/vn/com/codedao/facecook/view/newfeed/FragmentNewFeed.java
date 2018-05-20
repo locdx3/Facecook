@@ -27,11 +27,13 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Like;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.utils.Constant;
@@ -111,6 +113,18 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     }
 
     @Override
+    public void addPost(PostList post) {
+        post.setName(mName);
+        post.setType(1);
+        List<Like> likes = new ArrayList<>();
+        post.setLikeList(likes);
+        List<Comment> comments = new ArrayList<>();
+        post.setComment(comments);
+        post.setNewAdd(true);
+        mPostAdapter.addPost(post);
+    }
+
+    @Override
     public void onClickItemComment(PostList comments) {
         Intent intent = new Intent(getActivity(), CommentActivity.class);
         intent.putExtra("LIST_COMMENT",comments);
@@ -138,86 +152,14 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         if (requestCode == 1994) {
             if (resultCode == 1) {
                 Toast.makeText(getActivity(), data.getStringExtra("conten"), Toast.LENGTH_SHORT).show();
+                PostList post = new PostList();
+                post.setContent(data.getStringExtra("conten"));
+                mPresenterLogicHandleHome.addPost(post);
             }else {
                 mPresenterLogicHandleHome.getListPost();
             }
 
         }
-    }
-
-    public void onShowPopup(View v, int p, final int idPost) {
-
-        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // inflate the custom popup layout
-        final View inflatedView = layoutInflater.inflate(R.layout.dialog_comment, null, false);
-        // find the ListView in the popup layout
-        // ListView listView = (ListView)inflatedView.findViewById(R.id.commentsListView);
-        mRecyclerViewComment = inflatedView.findViewById(R.id.rcComment);
-        mPresenterLogicHandleHome.getListComment(p);
-        TextView txtDone = inflatedView.findViewById(R.id.txtDone);
-        final EditText editText = inflatedView.findViewById(R.id.edComment);
-        mTextView = inflatedView.findViewById(R.id.txtNocomment);
-        mImgSend = inflatedView.findViewById(R.id.imgSend);
-        mImgSend.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                Comment comment = new Comment();
-                comment.setContent(editText.getText().toString());
-                comment.setIdUser(mIdUser);
-                comment.setPostid(String.valueOf(idPost));
-                mPresenterLogicHandleHome.addComment(comment);
-            }
-        });
-
-
-        txtDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopWindow.dismiss();
-            }
-        });
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-
-        // set height depends on the device size
-        mPopWindow = new PopupWindow(inflatedView, size.x, size.y - 800, true);
-        // set a background drawable with rounders corners
-        mPopWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.fb_popup_bg));
-        mPopWindow.setAnimationStyle(R.style.DialogAnimation_2);
-        // make it focusable to show the keyboard to enter in `EditText`
-        mPopWindow.setFocusable(true);
-        // make it outside touchable to dismiss the popup window
-        mPopWindow.setOutsideTouchable(true);
-
-        // show the popup at bottom of the screen and set some margin at bottom ie,
-        mPopWindow.showAtLocation(v, Gravity.TOP, 0, 0);
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus == true) {
-                    InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                    inputMgr.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
-                    mPopWindow.update();
-
-                }
-            }
-        });
-        editText.requestFocus();
-        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                InputMethodManager inputMgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMgr.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                inputMgr.showSoftInput(getView(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-            }
-        });
-
     }
 
     @Override
@@ -227,5 +169,10 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
         mEvent.setmEvent(Constant.SEND_LIST_COMMENT);
         mEvent.setmMRepone(mPostList);
         EventBus.getDefault().post(mEvent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

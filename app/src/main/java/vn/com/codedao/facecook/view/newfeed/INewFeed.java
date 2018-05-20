@@ -3,6 +3,7 @@ package vn.com.codedao.facecook.view.newfeed;
 import java.util.List;
 
 import vn.com.codedao.facecook.model.newfeed.Comment;
+import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 
 /**
@@ -15,4 +16,5 @@ public interface INewFeed {
     void setAdapterComment(List<Comment> comments);
 
     void checkInternet(boolean iscontect);
+    void addPost(PostList post);
 }

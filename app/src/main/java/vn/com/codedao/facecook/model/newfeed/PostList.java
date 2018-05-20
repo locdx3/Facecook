@@ -33,6 +33,15 @@ public class PostList implements Serializable {
     @SerializedName("urlavatar")
     private String urlavatar;
     private boolean isHeader = false;
+    private boolean isNewAdd = false;
+
+    public boolean isNewAdd() {
+        return isNewAdd;
+    }
+
+    public void setNewAdd(boolean newAdd) {
+        isNewAdd = newAdd;
+    }
 
     public boolean isHeader() {
         return isHeader;

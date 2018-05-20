@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -78,11 +79,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
                 break;
             case 1:
+                if (post.isNewAdd()) {
+                    ((MyViewHolder) holder).relativeConten.setAlpha(0.5f);
+                }
                 ((MyViewHolder) holder).txtName.setText(post.getName());
                 //((MyViewHolder) holder).txtTime.setText(post.getTime());
                 ((MyViewHolder) holder).txtConten.setText(post.getContent());
                 final int sizelike = post.getLikeList() == null ? 0 : post.getLikeList().size();
-                ((MyViewHolder) holder).txtLikeCount.setText(sizelike+"");
+                ((MyViewHolder) holder).txtLikeCount.setText(sizelike + "");
                 int sizeComment = post.getComment() == null ? 0 : post.getComment().size();
                 ((MyViewHolder) holder).txtCommentCount.setText(sizeComment + " Comment");
                 //((MyViewHolder) holder).txtShareCount.setText(post.g() + " Share");
@@ -113,12 +117,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             like.setUserid(String.valueOf(mUserID));
                             post.getLikeList().add(like);
                             int likeCount = Integer.parseInt(((MyViewHolder) holder).txtLikeCount.getText().toString());
-                            ((MyViewHolder) holder).txtLikeCount.setText(likeCount + 1 +"" );
+                            ((MyViewHolder) holder).txtLikeCount.setText(likeCount + 1 + "");
                             mIOnClickItemNewFeed.ClickLike(like);
                         } else {
                             for (int i = 0; i < post.getLikeList().size(); i++) {
-                                Like like =post.getLikeList().get(i);
-                                if (like.getUserid().contains(mUserID+"")){
+                                Like like = post.getLikeList().get(i);
+                                if (like.getUserid().contains(mUserID + "")) {
                                     post.getLikeList().remove(i);
                                     break;
                                 }
@@ -126,7 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             ((MyViewHolder) holder).imgLike.setPressed(false);
                             ((MyViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
                             int likeCount = Integer.parseInt(((MyViewHolder) holder).txtLikeCount.getText().toString());
-                            if (likeCount>0) {
+                            if (likeCount > 0) {
                                 ((MyViewHolder) holder).txtLikeCount.setText(likeCount - 1 + "");
                             }
                         }
@@ -139,7 +143,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 //((ImgViewHolder) holder).txtTime.setText(post.getTime());
                 ((ImgViewHolder) holder).txtConten.setText(post.getContent());
                 int sizelike2 = post.getLikeList() == null ? 0 : post.getLikeList().size();
-                ((ImgViewHolder) holder).txtLikeCount.setText(sizelike2+"");
+                ((ImgViewHolder) holder).txtLikeCount.setText(sizelike2 + "");
                 int sizeComment2 = post.getComment() == null ? 0 : post.getComment().size();
                 ((ImgViewHolder) holder).txtCommentCount.setText(sizeComment2 + " Comment");
                 // ((ImgViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
@@ -179,12 +183,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             like.setUserid(String.valueOf(mUserID));
                             post.getLikeList().add(like);
                             int likeCount = Integer.parseInt(((ImgViewHolder) holder).txtLikeCount.getText().toString());
-                            ((ImgViewHolder) holder).txtLikeCount.setText(likeCount + 1 +"" );
+                            ((ImgViewHolder) holder).txtLikeCount.setText(likeCount + 1 + "");
                             mIOnClickItemNewFeed.ClickLike(like);
                         } else {
                             for (int i = 0; i < post.getLikeList().size(); i++) {
-                                Like like =post.getLikeList().get(i);
-                                if (like.getUserid().contains(mUserID+"")){
+                                Like like = post.getLikeList().get(i);
+                                if (like.getUserid().contains(mUserID + "")) {
                                     post.getLikeList().remove(i);
                                     break;
                                 }
@@ -192,7 +196,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             ((ImgViewHolder) holder).imgLike.setPressed(false);
                             ((ImgViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
                             int likeCount = Integer.parseInt(((ImgViewHolder) holder).txtLikeCount.getText().toString());
-                            if (likeCount>0) {
+                            if (likeCount > 0) {
                                 ((ImgViewHolder) holder).txtLikeCount.setText(likeCount - 1 + "");
                             }
                         }
@@ -235,6 +239,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView btnLike;
         public ImageView imgLike;
         public LinearLayout lnLike;
+        public RelativeLayout relativeConten;
 
         public MyViewHolder(View view) {
             super(view);
@@ -250,6 +255,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             txtShareCount = view.findViewById(R.id.txtShareCount);
             imgComment = view.findViewById(R.id.imgComment);
             lnComment = view.findViewById(R.id.lnComment);
+            relativeConten = view.findViewById(R.id.relativeConten);
 
         }
     }
@@ -289,20 +295,28 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout root_liner;
+
         public HeaderViewHolder(View itemView) {
             super(itemView);
             root_liner = itemView.findViewById(R.id.root_liner);
 
         }
     }
-    boolean isLike(PostList postList){
+
+    boolean isLike(PostList postList) {
         if (postList.getLikeList() != null) {
             for (Like like : postList.getLikeList()) {
                 if (like.getUserid().equals("" + mUserID)) {
-                  return true;
+                    return true;
                 }
             }
         }
         return false;
     }
+
+    void addPost(PostList post) {
+        postList.add(1, post);
+        this.notifyDataSetChanged();
+    }
+
 }

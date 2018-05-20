@@ -11,6 +11,7 @@
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
+            android:id="@+id/relativeConten"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -46,9 +47,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imgAvatar"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
                 android:text="@string/contenTest" />
 
             <RelativeLayout
@@ -71,6 +72,7 @@
                     android:layout_margin="@dimen/_2sdp"
                     android:layout_toEndOf="@+id/imglike"
                     android:text="2" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

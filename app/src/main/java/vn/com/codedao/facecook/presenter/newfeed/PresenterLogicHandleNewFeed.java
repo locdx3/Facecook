@@ -12,6 +12,8 @@ import java.util.List;
 import vn.com.codedao.facecook.apiservice.ApiConnect;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Like;
+import vn.com.codedao.facecook.model.newfeed.Post;
+import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
 import vn.com.codedao.facecook.utils.MessageEvent;
@@ -52,7 +54,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
                 mINewFeed.setApdater(mPost.getPostLists());
                 break;
             case Constant.HANDLE_ADD_POST_FINISH:
-                getListPost();
+                //getListPost();
                 break;
             default:
                 break;
@@ -77,6 +79,11 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
     public void addLike(Like like) {
         ApiConnect apiConnect = new ApiConnect();
         apiConnect.AddFell(like);
+    }
+
+    @Override
+    public void addPost(PostList post) {
+        mINewFeed.addPost(post);
     }
 
 }
