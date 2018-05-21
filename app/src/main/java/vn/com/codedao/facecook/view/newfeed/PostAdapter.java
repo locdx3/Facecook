@@ -1,5 +1,6 @@
 package vn.com.codedao.facecook.view.newfeed;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,6 +34,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostList> postList;
     private IOnClickItemNewFeed mIOnClickItemNewFeed;
     private int mUserID;
+    private int progess = 0;
+    private boolean isUpdateProgessbar = false;
 
 
     public PostAdapter(Context mContext, List<PostList> postList, IOnClickItemNewFeed iOnClickItemNewFeed, int UserID) {
@@ -79,45 +83,57 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
                 break;
             case 1:
+                final MyViewHolder viewHolder = ((MyViewHolder) holder);
                 if (post.isNewAdd()) {
-                    ((MyViewHolder) holder).relativeConten.setAlpha(0.5f);
+                    viewHolder.relativeConten.setAlpha(0.5f);
+                    viewHolder.progressBar.setVisibility(View.VISIBLE);
+                    ObjectAnimator animation = ObjectAnimator.ofInt(viewHolder.progressBar, "progress", 90);
+                    animation.setDuration(1000);
+                    animation.start();
+                    if (isUpdateProgessbar) {
+                        viewHolder.progressBar.setProgress(progess);
+                        isUpdateProgessbar = false;
+                        viewHolder.progressBar.setVisibility(View.GONE);
+                        viewHolder.relativeConten.setAlpha(1);
+                        post.setNewAdd(false);
+                    }
                 }
-                ((MyViewHolder) holder).txtName.setText(post.getName());
+                viewHolder.txtName.setText(post.getName());
                 //((MyViewHolder) holder).txtTime.setText(post.getTime());
-                ((MyViewHolder) holder).txtConten.setText(post.getContent());
+                viewHolder.txtConten.setText(post.getContent());
                 final int sizelike = post.getLikeList() == null ? 0 : post.getLikeList().size();
-                ((MyViewHolder) holder).txtLikeCount.setText(sizelike + "");
+                viewHolder.txtLikeCount.setText(sizelike + "");
                 int sizeComment = post.getComment() == null ? 0 : post.getComment().size();
-                ((MyViewHolder) holder).txtCommentCount.setText(sizeComment + " Comment");
+                viewHolder.txtCommentCount.setText(sizeComment + " Comment");
                 //((MyViewHolder) holder).txtShareCount.setText(post.g() + " Share");
-                Picasso.with(mContext).load(post.getUrlavatar()).into(((MyViewHolder) holder).imgAvater);
-                ((MyViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
+                Picasso.with(mContext).load(post.getUrlavatar()).into(viewHolder.imgAvater);
+                viewHolder.lnComment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mIOnClickItemNewFeed.onClickItemComment(post);
                     }
                 });
                 if (isLike(post)) {
-                    ((MyViewHolder) holder).imgLike.setPressed(true);
-                    ((MyViewHolder) holder).btnLike.setTextColor(Color.parseColor("#006DF0"));
+                    viewHolder.imgLike.setPressed(true);
+                    viewHolder.btnLike.setTextColor(Color.parseColor("#006DF0"));
                 } else {
-                    ((MyViewHolder) holder).imgLike.setPressed(false);
-                    ((MyViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
+                    viewHolder.imgLike.setPressed(false);
+                    viewHolder.btnLike.setTextColor(Color.parseColor("#BDBDC7"));
                 }
-                ((MyViewHolder) holder).btnLike.setOnClickListener(new View.OnClickListener() {
+                viewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint("NewApi")
                     @Override
                     public void onClick(View v) {
                         if (!isLike(post)) {
-                            ((MyViewHolder) holder).imgLike.setPressed(true);
-                            ((MyViewHolder) holder).btnLike.setTextColor(Color.parseColor("#006DF0"));
+                            viewHolder.imgLike.setPressed(true);
+                            viewHolder.btnLike.setTextColor(Color.parseColor("#006DF0"));
                             Like like = new Like();
                             like.setTypefeel("Like");
                             like.setPostid(post.getPostid());
                             like.setUserid(String.valueOf(mUserID));
                             post.getLikeList().add(like);
-                            int likeCount = Integer.parseInt(((MyViewHolder) holder).txtLikeCount.getText().toString());
-                            ((MyViewHolder) holder).txtLikeCount.setText(likeCount + 1 + "");
+                            int likeCount = Integer.parseInt(viewHolder.txtLikeCount.getText().toString());
+                            viewHolder.txtLikeCount.setText(likeCount + 1 + "");
                             mIOnClickItemNewFeed.ClickLike(like);
                         } else {
                             for (int i = 0; i < post.getLikeList().size(); i++) {
@@ -127,11 +143,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     break;
                                 }
                             }
-                            ((MyViewHolder) holder).imgLike.setPressed(false);
-                            ((MyViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
-                            int likeCount = Integer.parseInt(((MyViewHolder) holder).txtLikeCount.getText().toString());
+                            viewHolder.imgLike.setPressed(false);
+                            viewHolder.btnLike.setTextColor(Color.parseColor("#BDBDC7"));
+                            int likeCount = Integer.parseInt(viewHolder.txtLikeCount.getText().toString());
                             if (likeCount > 0) {
-                                ((MyViewHolder) holder).txtLikeCount.setText(likeCount - 1 + "");
+                                viewHolder.txtLikeCount.setText(likeCount - 1 + "");
                             }
                         }
                     }
@@ -139,24 +155,56 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 break;
             case 2:
-                ((ImgViewHolder) holder).txtName.setText(post.getName());
+                final ImgViewHolder imgViewHolder = ((ImgViewHolder) holder);
+                MImage mImage = post.getImage().get(0);
+                if (post.isNewAdd()) {
+                    imgViewHolder.relativeConten.setAlpha(0.5f);
+                    imgViewHolder.progressBar.setVisibility(View.VISIBLE);
+                    ObjectAnimator animation = ObjectAnimator.ofInt(imgViewHolder.progressBar, "progress", 90);
+                    Picasso.with(mContext)
+                            .load(post.getUriImgPost())
+                            .fit()
+                            .centerCrop()
+                            .into(imgViewHolder.imgPost);
+                    animation.setDuration(1000);
+                    animation.start();
+                    if (isUpdateProgessbar) {
+                        imgViewHolder.progressBar.setProgress(progess);
+                        isUpdateProgessbar = false;
+                        imgViewHolder.progressBar.setVisibility(View.GONE);
+                        imgViewHolder.relativeConten.setAlpha(1);
+                        post.setNewAdd(false);
+                    }
+                } else {
+                    if (post.getUriImgPost() != null) {
+                        Picasso.with(mContext)
+                                .load(post.getUriImgPost())
+                                .fit()
+                                .centerCrop()
+                                .into(imgViewHolder.imgPost);
+                    } else {
+
+                        Picasso.with(mContext)
+                                .load(mImage.getUrlimage())
+                                .fit()
+                                .centerCrop()
+                                .into(imgViewHolder.imgPost);
+                    }
+                }
+                imgViewHolder.txtName.setText(post.getName());
                 //((ImgViewHolder) holder).txtTime.setText(post.getTime());
-                ((ImgViewHolder) holder).txtConten.setText(post.getContent());
+                imgViewHolder.txtConten.setText(post.getContent());
                 int sizelike2 = post.getLikeList() == null ? 0 : post.getLikeList().size();
-                ((ImgViewHolder) holder).txtLikeCount.setText(sizelike2 + "");
+                imgViewHolder.txtLikeCount.setText(sizelike2 + "");
                 int sizeComment2 = post.getComment() == null ? 0 : post.getComment().size();
-                ((ImgViewHolder) holder).txtCommentCount.setText(sizeComment2 + " Comment");
+                imgViewHolder.txtCommentCount.setText(sizeComment2 + " Comment");
                 // ((ImgViewHolder) holder).txtShareCount.setText(post.getmShareCount() + " Share");
                 Picasso.with(mContext)
                         .load(post.getUrlavatar())
-                        .into(((ImgViewHolder) holder).imgAvater);
-                MImage mImage = post.getImage().get(0);
-                Picasso.with(mContext)
-                        .load(mImage.getUrlimage())
-                        .fit()
-                        .centerCrop()
-                        .into(((ImgViewHolder) holder).imgPost);
-                ((ImgViewHolder) holder).lnComment.setOnClickListener(new View.OnClickListener() {
+                        .into(imgViewHolder.imgAvater);
+
+
+                imgViewHolder.lnComment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mIOnClickItemNewFeed.onClickItemComment(post);
@@ -164,26 +212,26 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
 
                 if (isLike(post)) {
-                    ((ImgViewHolder) holder).imgLike.setPressed(true);
-                    ((ImgViewHolder) holder).btnLike.setTextColor(Color.parseColor("#006DF0"));
+                    imgViewHolder.imgLike.setPressed(true);
+                    imgViewHolder.btnLike.setTextColor(Color.parseColor("#006DF0"));
                 } else {
-                    ((ImgViewHolder) holder).imgLike.setPressed(false);
-                    ((ImgViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
+                    imgViewHolder.imgLike.setPressed(false);
+                    imgViewHolder.btnLike.setTextColor(Color.parseColor("#BDBDC7"));
                 }
-                ((ImgViewHolder) holder).btnLike.setOnClickListener(new View.OnClickListener() {
+                imgViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint("NewApi")
                     @Override
                     public void onClick(View v) {
                         if (!isLike(post)) {
-                            ((ImgViewHolder) holder).imgLike.setPressed(true);
-                            ((ImgViewHolder) holder).btnLike.setTextColor(Color.parseColor("#006DF0"));
+                            imgViewHolder.imgLike.setPressed(true);
+                            imgViewHolder.btnLike.setTextColor(Color.parseColor("#006DF0"));
                             Like like = new Like();
                             like.setTypefeel("Like");
                             like.setPostid(post.getPostid());
                             like.setUserid(String.valueOf(mUserID));
                             post.getLikeList().add(like);
-                            int likeCount = Integer.parseInt(((ImgViewHolder) holder).txtLikeCount.getText().toString());
-                            ((ImgViewHolder) holder).txtLikeCount.setText(likeCount + 1 + "");
+                            int likeCount = Integer.parseInt(imgViewHolder.txtLikeCount.getText().toString());
+                            imgViewHolder.txtLikeCount.setText(likeCount + 1 + "");
                             mIOnClickItemNewFeed.ClickLike(like);
                         } else {
                             for (int i = 0; i < post.getLikeList().size(); i++) {
@@ -193,11 +241,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     break;
                                 }
                             }
-                            ((ImgViewHolder) holder).imgLike.setPressed(false);
-                            ((ImgViewHolder) holder).btnLike.setTextColor(Color.parseColor("#BDBDC7"));
-                            int likeCount = Integer.parseInt(((ImgViewHolder) holder).txtLikeCount.getText().toString());
+                            imgViewHolder.imgLike.setPressed(false);
+                            imgViewHolder.btnLike.setTextColor(Color.parseColor("#BDBDC7"));
+                            int likeCount = Integer.parseInt(imgViewHolder.txtLikeCount.getText().toString());
                             if (likeCount > 0) {
-                                ((ImgViewHolder) holder).txtLikeCount.setText(likeCount - 1 + "");
+                                imgViewHolder.txtLikeCount.setText(likeCount - 1 + "");
                             }
                         }
                     }
@@ -240,6 +288,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ImageView imgLike;
         public LinearLayout lnLike;
         public RelativeLayout relativeConten;
+        public ProgressBar progressBar;
 
         public MyViewHolder(View view) {
             super(view);
@@ -256,6 +305,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             imgComment = view.findViewById(R.id.imgComment);
             lnComment = view.findViewById(R.id.lnComment);
             relativeConten = view.findViewById(R.id.relativeConten);
+            progressBar = view.findViewById(R.id.progressbarItem);
 
         }
     }
@@ -274,6 +324,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView btnLike;
         public ImageView imgLike;
         public LinearLayout lnLike;
+        public RelativeLayout relativeConten;
+        public ProgressBar progressBar;
 
         public ImgViewHolder(View itemView) {
             super(itemView);
@@ -290,6 +342,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             lnComment = itemView.findViewById(R.id.lnComment);
             btnLike = itemView.findViewById(R.id.btnLike);
             imgLike = itemView.findViewById(R.id.imgLikeClick);
+            relativeConten = itemView.findViewById(R.id.relativeConten);
+            progressBar = itemView.findViewById(R.id.progressbarItem);
         }
     }
 
@@ -316,6 +370,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     void addPost(PostList post) {
         postList.add(1, post);
+        this.notifyDataSetChanged();
+    }
+
+    void setProgressBar(int progress) {
+        isUpdateProgessbar = true;
+        this.progess = progress;
         this.notifyDataSetChanged();
     }
 

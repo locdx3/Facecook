@@ -34,6 +34,24 @@ public class PostList implements Serializable {
     private String urlavatar;
     private boolean isHeader = false;
     private boolean isNewAdd = false;
+    private int progess ;
+    private String uriImgPost;
+
+    public String getUriImgPost() {
+        return uriImgPost;
+    }
+
+    public void setUriImgPost(String uriImgPost) {
+        this.uriImgPost = uriImgPost;
+    }
+
+    public int getProgess() {
+        return progess;
+    }
+
+    public void setProgess(int progess) {
+        this.progess = progess;
+    }
 
     public boolean isNewAdd() {
         return isNewAdd;

@@ -39,8 +39,7 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
     private String mName;
     private ImageView mImgPhoto;
     private ProgressBar mProgressBar;
-    private int progressStatus;
-    private Handler handler = new Handler();
+    private Uri mUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +81,9 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
                 mPresenterLogicHandlePost.postOnService(mIdUser, mExtractEditText.getText().toString());
                 Intent intent = new Intent();
                 intent.putExtra("conten", mExtractEditText.getText().toString());
+                if (mUri != null) {
+                    intent.putExtra("uri", mUri.toString());
+                }
                 setResult(1, intent);
                 finish();
                 break;
@@ -114,10 +116,10 @@ public class PostActiviy extends AppCompatActivity implements View.OnClickListen
             Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
             // Khi đã chọn xong ảnh thì chúng ta tiến hành upload thôi
             mAvatar = Constant.REQUEST_UPDATE_IMAGE;
-            Uri uri = data.getData();
-            mImgPhoto.setImageURI(uri);
+            mUri = data.getData();
+            mImgPhoto.setImageURI(mUri);
             mImgPhoto.setVisibility(View.VISIBLE);
-            mPresenterLogicHandlePost.uploadFiles(uri);
+            mPresenterLogicHandlePost.uploadFiles(mUri);
         }
     }
 

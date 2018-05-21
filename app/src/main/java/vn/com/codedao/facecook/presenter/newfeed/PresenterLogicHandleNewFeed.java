@@ -1,7 +1,9 @@
 package vn.com.codedao.facecook.presenter.newfeed;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -12,7 +14,6 @@ import java.util.List;
 import vn.com.codedao.facecook.apiservice.ApiConnect;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Like;
-import vn.com.codedao.facecook.model.newfeed.Post;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.model.newfeed.PostResponse;
 import vn.com.codedao.facecook.utils.Constant;
@@ -25,6 +26,7 @@ import vn.com.codedao.facecook.view.newfeed.INewFeed;
 
 public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
 
+    private static final String TAG = "PresenterLogicHandleNewFeed" ;
     private INewFeed mINewFeed;
     PostResponse mPost;
     int mPotision = 0;
@@ -40,6 +42,7 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
         apiConnect.getPost(10,0);
     }
 
+    @SuppressLint("LongLogTag")
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onMessageEvent(MessageEvent event) {
         switch (event.getmEvent()) {
@@ -54,7 +57,8 @@ public class PresenterLogicHandleNewFeed implements IPresenterHandleNewFeed {
                 mINewFeed.setApdater(mPost.getPostLists());
                 break;
             case Constant.HANDLE_ADD_POST_FINISH:
-                //getListPost();
+                Log.d(TAG, "onMessageEvent() called with: event = HANDLE_ADD_POST_FINISH");
+                mINewFeed.updateProgessbar();
                 break;
             default:
                 break;

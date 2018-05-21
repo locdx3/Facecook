@@ -5,20 +5,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -33,7 +26,7 @@ import java.util.List;
 import vn.com.codedao.facecook.R;
 import vn.com.codedao.facecook.model.newfeed.Comment;
 import vn.com.codedao.facecook.model.newfeed.Like;
-import vn.com.codedao.facecook.model.newfeed.Post;
+import vn.com.codedao.facecook.model.newfeed.MImage;
 import vn.com.codedao.facecook.model.newfeed.PostList;
 import vn.com.codedao.facecook.presenter.newfeed.PresenterLogicHandleNewFeed;
 import vn.com.codedao.facecook.utils.Constant;
@@ -115,13 +108,26 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
     @Override
     public void addPost(PostList post) {
         post.setName(mName);
-        post.setType(1);
+        if (post.getUriImgPost() != null) {
+            List<MImage> mImages = new ArrayList<>();
+            mImages.add(new MImage());
+            post.setImage(mImages);
+        } else {
+            post.setType(1);
+        }
+
+
         List<Like> likes = new ArrayList<>();
         post.setLikeList(likes);
         List<Comment> comments = new ArrayList<>();
         post.setComment(comments);
         post.setNewAdd(true);
         mPostAdapter.addPost(post);
+    }
+
+    @Override
+    public void updateProgessbar() {
+        mPostAdapter.setProgressBar(100);
     }
 
     @Override
@@ -153,6 +159,10 @@ public class FragmentNewFeed extends Fragment implements INewFeed, IOnClickItemN
             if (resultCode == 1) {
                 Toast.makeText(getActivity(), data.getStringExtra("conten"), Toast.LENGTH_SHORT).show();
                 PostList post = new PostList();
+                String uri = data.getStringExtra("uri");
+                if (uri != null) {
+                    post.setUriImgPost(uri);
+                }
                 post.setContent(data.getStringExtra("conten"));
                 mPresenterLogicHandleHome.addPost(post);
             }else {
